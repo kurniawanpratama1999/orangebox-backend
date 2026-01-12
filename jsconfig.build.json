@@ -1,0 +1,4 @@
+{
+  "extends": "./jsconfig.json",
+  "exclude": ["**/*.test.js", "**/*.spec.js"]
+}

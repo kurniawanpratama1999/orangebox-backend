@@ -20,11 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "mysql",
-<<<<<<< HEAD
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/orm/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nmodel users {\n  id       Int    @id @default(autoincrement())\n  name     String\n  username String\n  password String @db.LongText\n\n  created_at DateTime @default(now())\n  updated_at DateTime @default(now()) @updatedAt\n}\n",
-=======
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/orm/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nmodel users {\n  id       Int    @id @default(autoincrement())\n  name     String\n  username String\n  password String @db.LongText\n\n  created_at DateTime @default(now())\n  updated_at DateTime @default(now()) @updatedAt\n  tokens     tokens[]\n}\n\nmodel tokens {\n  id      Int    @id @default(autoincrement())\n  user_id Int\n  token   String @db.LongText\n  user    users  @relation(fields: [user_id], references: [id])\n}\n\nmodel categories {\n  id          Int        @id @default(autoincrement())\n  name        String\n  description String     @db.LongText\n  products    products[]\n}\n\nmodel products {\n  id             Int     @id @default(autoincrement())\n  category_id    Int\n  name           String\n  price          Float\n  is_recommended Boolean @default(false)\n  is_new         Boolean @default(false)\n  description    String  @db.LongText\n\n  created_at DateTime   @default(now())\n  updated_at DateTime   @default(now()) @updatedAt\n  category   categories @relation(fields: [category_id], references: [id])\n}\n\nmodel profile_umkm {\n  id          Int    @id @default(autoincrement())\n  name        String\n  address     String @db.LongText\n  phone       String\n  email       String\n  website     String\n  photo       String @db.LongText\n  description String @db.LongText\n}\n\nmodel profile_owner {\n  id          Int    @id @default(autoincrement())\n  name        String\n  photo       String @db.LongText\n  description String @db.LongText\n}\n",
->>>>>>> riyan-branch
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/orm/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nmodel users {\n  id       Int    @id @default(autoincrement())\n  name     String\n  username String @unique\n  password String @db.LongText\n\n  created_at DateTime @default(now())\n  updated_at DateTime @default(now()) @updatedAt\n  tokens     tokens[]\n}\n\nmodel tokens {\n  id      String @id\n  user_id Int    @unique\n  token   String @db.LongText\n\n  created_at DateTime @default(now())\n  updated_at DateTime @default(now()) @updatedAt\n\n  user users @relation(fields: [user_id], references: [id])\n}\n\nmodel categories {\n  id          Int        @id @default(autoincrement())\n  name        String     @unique\n  description String     @db.LongText\n  products    products[]\n}\n\nmodel products {\n  id          Int     @id @default(autoincrement())\n  category_id Int\n  photo       String  @db.LongText\n  name        String  @unique\n  description String  @db.LongText\n  price       Decimal\n\n  is_favorite Boolean @default(false)\n  is_new      Boolean @default(false)\n\n  created_at DateTime @default(now())\n  updated_at DateTime @default(now()) @updatedAt\n\n  category categories @relation(fields: [category_id], references: [id])\n}\n\nmodel umkm_name {\n  name    String @unique\n  address String @db.LongText\n}\n\nmodel sosmed {\n  id          Int    @id @default(autoincrement())\n  name        String @unique\n  description String\n  link        String @db.LongText\n\n  more_cta more_cta?\n\n  button_location1 location[] @relation(\"link1\")\n  button_location2 location[] @relation(\"link2\")\n}\n\nmodel hero {\n  headline    String @unique\n  photo       String @db.LongText\n  subheadline String\n  description String @db.LongText\n}\n\nmodel favorite_menu {\n  title            String @unique\n  information      String\n  max_show_product Int\n}\n\nmodel facility_and_place {\n  title       String @unique\n  information String\n}\n\nmodel facilities_and_places {\n  id    Int    @id @default(autoincrement())\n  photo String @db.LongText\n  name  String\n}\n\nmodel more_cta {\n  title   String @unique\n  button  String\n  link_id Int    @unique\n\n  sosmed sosmed @relation(fields: [link_id], references: [id])\n}\n\nmodel testimoni {\n  title       String @unique\n  information String\n}\n\nmodel testimonies {\n  id          Int     @id @default(autoincrement())\n  photo       String? @db.LongText\n  name        String\n  description String\n}\n\nmodel location {\n  title String @unique\n  photo String @db.LongText\n\n  button1  String\n  link1_id Int\n\n  button2  String\n  link2_id Int\n\n  link1 sosmed @relation(\"link1\", fields: [link1_id], references: [id])\n  link2 sosmed @relation(\"link2\", fields: [link2_id], references: [id])\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -32,11 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-<<<<<<< HEAD
-config.runtimeDataModel = JSON.parse("{\"models\":{\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
-=======
-config.runtimeDataModel = JSON.parse("{\"models\":{\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tokens\",\"kind\":\"object\",\"type\":\"tokens\",\"relationName\":\"tokensTousers\"}],\"dbName\":null},\"tokens\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"tokensTousers\"}],\"dbName\":null},\"categories\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"products\",\"relationName\":\"categoriesToproducts\"}],\"dbName\":null},\"products\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"category_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"is_recommended\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"is_new\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"category\",\"kind\":\"object\",\"type\":\"categories\",\"relationName\":\"categoriesToproducts\"}],\"dbName\":null},\"profile_umkm\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"website\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"profile_owner\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
->>>>>>> riyan-branch
+config.runtimeDataModel = JSON.parse("{\"models\":{\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tokens\",\"kind\":\"object\",\"type\":\"tokens\",\"relationName\":\"tokensTousers\"}],\"dbName\":null},\"tokens\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"tokensTousers\"}],\"dbName\":null},\"categories\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"products\",\"relationName\":\"categoriesToproducts\"}],\"dbName\":null},\"products\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"category_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"is_favorite\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"is_new\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"category\",\"kind\":\"object\",\"type\":\"categories\",\"relationName\":\"categoriesToproducts\"}],\"dbName\":null},\"umkm_name\":{\"fields\":[{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"sosmed\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"link\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"more_cta\",\"kind\":\"object\",\"type\":\"more_cta\",\"relationName\":\"more_ctaTososmed\"},{\"name\":\"button_location1\",\"kind\":\"object\",\"type\":\"location\",\"relationName\":\"link1\"},{\"name\":\"button_location2\",\"kind\":\"object\",\"type\":\"location\",\"relationName\":\"link2\"}],\"dbName\":null},\"hero\":{\"fields\":[{\"name\":\"headline\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subheadline\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"favorite_menu\":{\"fields\":[{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"information\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"max_show_product\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"facility_and_place\":{\"fields\":[{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"information\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"facilities_and_places\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"more_cta\":{\"fields\":[{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"button\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"link_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"sosmed\",\"kind\":\"object\",\"type\":\"sosmed\",\"relationName\":\"more_ctaTososmed\"}],\"dbName\":null},\"testimoni\":{\"fields\":[{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"information\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"testimonies\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"location\":{\"fields\":[{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"button1\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"link1_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"button2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"link2_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"link1\",\"kind\":\"object\",\"type\":\"sosmed\",\"relationName\":\"link1\"},{\"name\":\"link2\",\"kind\":\"object\",\"type\":\"sosmed\",\"relationName\":\"link2\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -191,8 +183,6 @@ export interface PrismaClient<
     * ```
     */
   get users(): Prisma.usersDelegate<ExtArgs, { omit: OmitOpts }>;
-<<<<<<< HEAD
-=======
 
   /**
    * `prisma.tokens`: Exposes CRUD operations for the **tokens** model.
@@ -225,25 +215,104 @@ export interface PrismaClient<
   get products(): Prisma.productsDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.profile_umkm`: Exposes CRUD operations for the **profile_umkm** model.
+   * `prisma.umkm_name`: Exposes CRUD operations for the **umkm_name** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Profile_umkms
-    * const profile_umkms = await prisma.profile_umkm.findMany()
+    * // Fetch zero or more Umkm_names
+    * const umkm_names = await prisma.umkm_name.findMany()
     * ```
     */
-  get profile_umkm(): Prisma.profile_umkmDelegate<ExtArgs, { omit: OmitOpts }>;
+  get umkm_name(): Prisma.umkm_nameDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.profile_owner`: Exposes CRUD operations for the **profile_owner** model.
+   * `prisma.sosmed`: Exposes CRUD operations for the **sosmed** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Profile_owners
-    * const profile_owners = await prisma.profile_owner.findMany()
+    * // Fetch zero or more Sosmeds
+    * const sosmeds = await prisma.sosmed.findMany()
     * ```
     */
-  get profile_owner(): Prisma.profile_ownerDelegate<ExtArgs, { omit: OmitOpts }>;
->>>>>>> riyan-branch
+  get sosmed(): Prisma.sosmedDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.hero`: Exposes CRUD operations for the **hero** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Heroes
+    * const heroes = await prisma.hero.findMany()
+    * ```
+    */
+  get hero(): Prisma.heroDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.favorite_menu`: Exposes CRUD operations for the **favorite_menu** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Favorite_menus
+    * const favorite_menus = await prisma.favorite_menu.findMany()
+    * ```
+    */
+  get favorite_menu(): Prisma.favorite_menuDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.facility_and_place`: Exposes CRUD operations for the **facility_and_place** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Facility_and_places
+    * const facility_and_places = await prisma.facility_and_place.findMany()
+    * ```
+    */
+  get facility_and_place(): Prisma.facility_and_placeDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.facilities_and_places`: Exposes CRUD operations for the **facilities_and_places** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Facilities_and_places
+    * const facilities_and_places = await prisma.facilities_and_places.findMany()
+    * ```
+    */
+  get facilities_and_places(): Prisma.facilities_and_placesDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.more_cta`: Exposes CRUD operations for the **more_cta** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more More_ctas
+    * const more_ctas = await prisma.more_cta.findMany()
+    * ```
+    */
+  get more_cta(): Prisma.more_ctaDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.testimoni`: Exposes CRUD operations for the **testimoni** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Testimonis
+    * const testimonis = await prisma.testimoni.findMany()
+    * ```
+    */
+  get testimoni(): Prisma.testimoniDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.testimonies`: Exposes CRUD operations for the **testimonies** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Testimonies
+    * const testimonies = await prisma.testimonies.findMany()
+    * ```
+    */
+  get testimonies(): Prisma.testimoniesDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.location`: Exposes CRUD operations for the **location** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Locations
+    * const locations = await prisma.location.findMany()
+    * ```
+    */
+  get location(): Prisma.locationDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

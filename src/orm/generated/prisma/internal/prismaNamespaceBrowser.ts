@@ -51,16 +51,20 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-<<<<<<< HEAD
-  users: 'users'
-=======
   users: 'users',
   tokens: 'tokens',
   categories: 'categories',
   products: 'products',
-  profile_umkm: 'profile_umkm',
-  profile_owner: 'profile_owner'
->>>>>>> riyan-branch
+  umkm_name: 'umkm_name',
+  sosmed: 'sosmed',
+  hero: 'hero',
+  favorite_menu: 'favorite_menu',
+  facility_and_place: 'facility_and_place',
+  facilities_and_places: 'facilities_and_places',
+  more_cta: 'more_cta',
+  testimoni: 'testimoni',
+  testimonies: 'testimonies',
+  location: 'location'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -91,12 +95,12 @@ export const UsersScalarFieldEnum = {
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
 
 
-<<<<<<< HEAD
-=======
 export const TokensScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  token: 'token'
+  token: 'token',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type TokensScalarFieldEnum = (typeof TokensScalarFieldEnum)[keyof typeof TokensScalarFieldEnum]
@@ -114,11 +118,12 @@ export type CategoriesScalarFieldEnum = (typeof CategoriesScalarFieldEnum)[keyof
 export const ProductsScalarFieldEnum = {
   id: 'id',
   category_id: 'category_id',
+  photo: 'photo',
   name: 'name',
-  price: 'price',
-  is_recommended: 'is_recommended',
-  is_new: 'is_new',
   description: 'description',
+  price: 'price',
+  is_favorite: 'is_favorite',
+  is_new: 'is_new',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -126,31 +131,99 @@ export const ProductsScalarFieldEnum = {
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
 
 
-export const Profile_umkmScalarFieldEnum = {
+export const Umkm_nameScalarFieldEnum = {
+  name: 'name',
+  address: 'address'
+} as const
+
+export type Umkm_nameScalarFieldEnum = (typeof Umkm_nameScalarFieldEnum)[keyof typeof Umkm_nameScalarFieldEnum]
+
+
+export const SosmedScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  address: 'address',
-  phone: 'phone',
-  email: 'email',
-  website: 'website',
+  description: 'description',
+  link: 'link'
+} as const
+
+export type SosmedScalarFieldEnum = (typeof SosmedScalarFieldEnum)[keyof typeof SosmedScalarFieldEnum]
+
+
+export const HeroScalarFieldEnum = {
+  headline: 'headline',
   photo: 'photo',
+  subheadline: 'subheadline',
   description: 'description'
 } as const
 
-export type Profile_umkmScalarFieldEnum = (typeof Profile_umkmScalarFieldEnum)[keyof typeof Profile_umkmScalarFieldEnum]
+export type HeroScalarFieldEnum = (typeof HeroScalarFieldEnum)[keyof typeof HeroScalarFieldEnum]
 
 
-export const Profile_ownerScalarFieldEnum = {
+export const Favorite_menuScalarFieldEnum = {
+  title: 'title',
+  information: 'information',
+  max_show_product: 'max_show_product'
+} as const
+
+export type Favorite_menuScalarFieldEnum = (typeof Favorite_menuScalarFieldEnum)[keyof typeof Favorite_menuScalarFieldEnum]
+
+
+export const Facility_and_placeScalarFieldEnum = {
+  title: 'title',
+  information: 'information'
+} as const
+
+export type Facility_and_placeScalarFieldEnum = (typeof Facility_and_placeScalarFieldEnum)[keyof typeof Facility_and_placeScalarFieldEnum]
+
+
+export const Facilities_and_placesScalarFieldEnum = {
   id: 'id',
-  name: 'name',
   photo: 'photo',
+  name: 'name'
+} as const
+
+export type Facilities_and_placesScalarFieldEnum = (typeof Facilities_and_placesScalarFieldEnum)[keyof typeof Facilities_and_placesScalarFieldEnum]
+
+
+export const More_ctaScalarFieldEnum = {
+  title: 'title',
+  button: 'button',
+  link_id: 'link_id'
+} as const
+
+export type More_ctaScalarFieldEnum = (typeof More_ctaScalarFieldEnum)[keyof typeof More_ctaScalarFieldEnum]
+
+
+export const TestimoniScalarFieldEnum = {
+  title: 'title',
+  information: 'information'
+} as const
+
+export type TestimoniScalarFieldEnum = (typeof TestimoniScalarFieldEnum)[keyof typeof TestimoniScalarFieldEnum]
+
+
+export const TestimoniesScalarFieldEnum = {
+  id: 'id',
+  photo: 'photo',
+  name: 'name',
   description: 'description'
 } as const
 
-export type Profile_ownerScalarFieldEnum = (typeof Profile_ownerScalarFieldEnum)[keyof typeof Profile_ownerScalarFieldEnum]
+export type TestimoniesScalarFieldEnum = (typeof TestimoniesScalarFieldEnum)[keyof typeof TestimoniesScalarFieldEnum]
 
 
->>>>>>> riyan-branch
+export const LocationScalarFieldEnum = {
+  title: 'title',
+  photo: 'photo',
+  button1: 'button1',
+  link1_id: 'link1_id',
+  button2: 'button2',
+  link2_id: 'link2_id'
+} as const
+
+export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -167,10 +240,9 @@ export const usersOrderByRelevanceFieldEnum = {
 
 export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
 
-<<<<<<< HEAD
-=======
 
 export const tokensOrderByRelevanceFieldEnum = {
+  id: 'id',
   token: 'token'
 } as const
 
@@ -186,6 +258,7 @@ export type categoriesOrderByRelevanceFieldEnum = (typeof categoriesOrderByRelev
 
 
 export const productsOrderByRelevanceFieldEnum = {
+  photo: 'photo',
   name: 'name',
   description: 'description'
 } as const
@@ -193,25 +266,96 @@ export const productsOrderByRelevanceFieldEnum = {
 export type productsOrderByRelevanceFieldEnum = (typeof productsOrderByRelevanceFieldEnum)[keyof typeof productsOrderByRelevanceFieldEnum]
 
 
-export const profile_umkmOrderByRelevanceFieldEnum = {
+export const umkm_nameOrderByRelevanceFieldEnum = {
   name: 'name',
-  address: 'address',
-  phone: 'phone',
-  email: 'email',
-  website: 'website',
+  address: 'address'
+} as const
+
+export type umkm_nameOrderByRelevanceFieldEnum = (typeof umkm_nameOrderByRelevanceFieldEnum)[keyof typeof umkm_nameOrderByRelevanceFieldEnum]
+
+
+export const sosmedOrderByRelevanceFieldEnum = {
+  name: 'name',
+  description: 'description',
+  link: 'link'
+} as const
+
+export type sosmedOrderByRelevanceFieldEnum = (typeof sosmedOrderByRelevanceFieldEnum)[keyof typeof sosmedOrderByRelevanceFieldEnum]
+
+
+export const heroOrderByRelevanceFieldEnum = {
+  headline: 'headline',
   photo: 'photo',
+  subheadline: 'subheadline',
   description: 'description'
 } as const
 
-export type profile_umkmOrderByRelevanceFieldEnum = (typeof profile_umkmOrderByRelevanceFieldEnum)[keyof typeof profile_umkmOrderByRelevanceFieldEnum]
+export type heroOrderByRelevanceFieldEnum = (typeof heroOrderByRelevanceFieldEnum)[keyof typeof heroOrderByRelevanceFieldEnum]
 
 
-export const profile_ownerOrderByRelevanceFieldEnum = {
-  name: 'name',
+export const favorite_menuOrderByRelevanceFieldEnum = {
+  title: 'title',
+  information: 'information'
+} as const
+
+export type favorite_menuOrderByRelevanceFieldEnum = (typeof favorite_menuOrderByRelevanceFieldEnum)[keyof typeof favorite_menuOrderByRelevanceFieldEnum]
+
+
+export const facility_and_placeOrderByRelevanceFieldEnum = {
+  title: 'title',
+  information: 'information'
+} as const
+
+export type facility_and_placeOrderByRelevanceFieldEnum = (typeof facility_and_placeOrderByRelevanceFieldEnum)[keyof typeof facility_and_placeOrderByRelevanceFieldEnum]
+
+
+export const facilities_and_placesOrderByRelevanceFieldEnum = {
   photo: 'photo',
+  name: 'name'
+} as const
+
+export type facilities_and_placesOrderByRelevanceFieldEnum = (typeof facilities_and_placesOrderByRelevanceFieldEnum)[keyof typeof facilities_and_placesOrderByRelevanceFieldEnum]
+
+
+export const more_ctaOrderByRelevanceFieldEnum = {
+  title: 'title',
+  button: 'button'
+} as const
+
+export type more_ctaOrderByRelevanceFieldEnum = (typeof more_ctaOrderByRelevanceFieldEnum)[keyof typeof more_ctaOrderByRelevanceFieldEnum]
+
+
+export const testimoniOrderByRelevanceFieldEnum = {
+  title: 'title',
+  information: 'information'
+} as const
+
+export type testimoniOrderByRelevanceFieldEnum = (typeof testimoniOrderByRelevanceFieldEnum)[keyof typeof testimoniOrderByRelevanceFieldEnum]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const testimoniesOrderByRelevanceFieldEnum = {
+  photo: 'photo',
+  name: 'name',
   description: 'description'
 } as const
 
-export type profile_ownerOrderByRelevanceFieldEnum = (typeof profile_ownerOrderByRelevanceFieldEnum)[keyof typeof profile_ownerOrderByRelevanceFieldEnum]
+export type testimoniesOrderByRelevanceFieldEnum = (typeof testimoniesOrderByRelevanceFieldEnum)[keyof typeof testimoniesOrderByRelevanceFieldEnum]
 
->>>>>>> riyan-branch
+
+export const locationOrderByRelevanceFieldEnum = {
+  title: 'title',
+  photo: 'photo',
+  button1: 'button1',
+  button2: 'button2'
+} as const
+
+export type locationOrderByRelevanceFieldEnum = (typeof locationOrderByRelevanceFieldEnum)[keyof typeof locationOrderByRelevanceFieldEnum]
+

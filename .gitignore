@@ -3,7 +3,7 @@ node_modules
 .env
 .env.*
 
-/generated/prisma
+src/orm/generated/prisma
 # Logs
 logs
 *.log

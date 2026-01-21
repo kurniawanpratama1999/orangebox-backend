@@ -213,13 +213,13 @@ export type categoriesOrderByWithRelationInput = {
 
 export type categoriesWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  name?: string
   AND?: Prisma.categoriesWhereInput | Prisma.categoriesWhereInput[]
   OR?: Prisma.categoriesWhereInput[]
   NOT?: Prisma.categoriesWhereInput | Prisma.categoriesWhereInput[]
-  name?: Prisma.StringFilter<"categories"> | string
   description?: Prisma.StringFilter<"categories"> | string
   products?: Prisma.ProductsListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type categoriesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

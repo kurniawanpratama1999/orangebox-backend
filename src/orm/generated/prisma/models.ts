@@ -9,12 +9,17 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/users.ts'
-<<<<<<< HEAD
-=======
 export type * from './models/tokens.ts'
 export type * from './models/categories.ts'
 export type * from './models/products.ts'
-export type * from './models/profile_umkm.ts'
-export type * from './models/profile_owner.ts'
->>>>>>> riyan-branch
+export type * from './models/umkm_name.ts'
+export type * from './models/sosmed.ts'
+export type * from './models/hero.ts'
+export type * from './models/favorite_menu.ts'
+export type * from './models/facility_and_place.ts'
+export type * from './models/facilities_and_places.ts'
+export type * from './models/more_cta.ts'
+export type * from './models/testimoni.ts'
+export type * from './models/testimonies.ts'
+export type * from './models/location.ts'
 export type * from './commonInputTypes.ts'

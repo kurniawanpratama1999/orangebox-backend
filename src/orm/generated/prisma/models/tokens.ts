@@ -27,42 +27,44 @@ export type AggregateTokens = {
 }
 
 export type TokensAvgAggregateOutputType = {
-  id: number | null
   user_id: number | null
 }
 
 export type TokensSumAggregateOutputType = {
-  id: number | null
   user_id: number | null
 }
 
 export type TokensMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   user_id: number | null
   token: string | null
+  created_at: Date | null
+  updated_at: Date | null
 }
 
 export type TokensMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   user_id: number | null
   token: string | null
+  created_at: Date | null
+  updated_at: Date | null
 }
 
 export type TokensCountAggregateOutputType = {
   id: number
   user_id: number
   token: number
+  created_at: number
+  updated_at: number
   _all: number
 }
 
 
 export type TokensAvgAggregateInputType = {
-  id?: true
   user_id?: true
 }
 
 export type TokensSumAggregateInputType = {
-  id?: true
   user_id?: true
 }
 
@@ -70,18 +72,24 @@ export type TokensMinAggregateInputType = {
   id?: true
   user_id?: true
   token?: true
+  created_at?: true
+  updated_at?: true
 }
 
 export type TokensMaxAggregateInputType = {
   id?: true
   user_id?: true
   token?: true
+  created_at?: true
+  updated_at?: true
 }
 
 export type TokensCountAggregateInputType = {
   id?: true
   user_id?: true
   token?: true
+  created_at?: true
+  updated_at?: true
   _all?: true
 }
 
@@ -172,9 +180,11 @@ export type tokensGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 export type TokensGroupByOutputType = {
-  id: number
+  id: string
   user_id: number
   token: string
+  created_at: Date
+  updated_at: Date
   _count: TokensCountAggregateOutputType | null
   _avg: TokensAvgAggregateOutputType | null
   _sum: TokensSumAggregateOutputType | null
@@ -201,9 +211,11 @@ export type tokensWhereInput = {
   AND?: Prisma.tokensWhereInput | Prisma.tokensWhereInput[]
   OR?: Prisma.tokensWhereInput[]
   NOT?: Prisma.tokensWhereInput | Prisma.tokensWhereInput[]
-  id?: Prisma.IntFilter<"tokens"> | number
+  id?: Prisma.StringFilter<"tokens"> | string
   user_id?: Prisma.IntFilter<"tokens"> | number
   token?: Prisma.StringFilter<"tokens"> | string
+  created_at?: Prisma.DateTimeFilter<"tokens"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"tokens"> | Date | string
   user?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
 }
 
@@ -211,24 +223,30 @@ export type tokensOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
   user?: Prisma.usersOrderByWithRelationInput
   _relevance?: Prisma.tokensOrderByRelevanceInput
 }
 
 export type tokensWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
+  user_id?: number
   AND?: Prisma.tokensWhereInput | Prisma.tokensWhereInput[]
   OR?: Prisma.tokensWhereInput[]
   NOT?: Prisma.tokensWhereInput | Prisma.tokensWhereInput[]
-  user_id?: Prisma.IntFilter<"tokens"> | number
   token?: Prisma.StringFilter<"tokens"> | string
+  created_at?: Prisma.DateTimeFilter<"tokens"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"tokens"> | Date | string
   user?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
-}, "id">
+}, "id" | "user_id">
 
 export type tokensOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
   _count?: Prisma.tokensCountOrderByAggregateInput
   _avg?: Prisma.tokensAvgOrderByAggregateInput
   _max?: Prisma.tokensMaxOrderByAggregateInput
@@ -240,47 +258,66 @@ export type tokensScalarWhereWithAggregatesInput = {
   AND?: Prisma.tokensScalarWhereWithAggregatesInput | Prisma.tokensScalarWhereWithAggregatesInput[]
   OR?: Prisma.tokensScalarWhereWithAggregatesInput[]
   NOT?: Prisma.tokensScalarWhereWithAggregatesInput | Prisma.tokensScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"tokens"> | number
+  id?: Prisma.StringWithAggregatesFilter<"tokens"> | string
   user_id?: Prisma.IntWithAggregatesFilter<"tokens"> | number
   token?: Prisma.StringWithAggregatesFilter<"tokens"> | string
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"tokens"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"tokens"> | Date | string
 }
 
 export type tokensCreateInput = {
+  id: string
   token: string
+  created_at?: Date | string
+  updated_at?: Date | string
   user: Prisma.usersCreateNestedOneWithoutTokensInput
 }
 
 export type tokensUncheckedCreateInput = {
-  id?: number
+  id: string
   user_id: number
   token: string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type tokensUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.usersUpdateOneRequiredWithoutTokensNestedInput
 }
 
 export type tokensUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.IntFieldUpdateOperationsInput | number
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type tokensCreateManyInput = {
-  id?: number
+  id: string
   user_id: number
   token: string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type tokensUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type tokensUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.IntFieldUpdateOperationsInput | number
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TokensListRelationFilter = {
@@ -303,10 +340,11 @@ export type tokensCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type tokensAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
 }
 
@@ -314,16 +352,19 @@ export type tokensMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type tokensMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   token?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type tokensSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
 }
 
@@ -370,12 +411,17 @@ export type tokensUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type tokensCreateWithoutUserInput = {
+  id: string
   token: string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type tokensUncheckedCreateWithoutUserInput = {
-  id?: number
+  id: string
   token: string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type tokensCreateOrConnectWithoutUserInput = {
@@ -408,28 +454,39 @@ export type tokensScalarWhereInput = {
   AND?: Prisma.tokensScalarWhereInput | Prisma.tokensScalarWhereInput[]
   OR?: Prisma.tokensScalarWhereInput[]
   NOT?: Prisma.tokensScalarWhereInput | Prisma.tokensScalarWhereInput[]
-  id?: Prisma.IntFilter<"tokens"> | number
+  id?: Prisma.StringFilter<"tokens"> | string
   user_id?: Prisma.IntFilter<"tokens"> | number
   token?: Prisma.StringFilter<"tokens"> | string
+  created_at?: Prisma.DateTimeFilter<"tokens"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"tokens"> | Date | string
 }
 
 export type tokensCreateManyUserInput = {
-  id?: number
+  id: string
   token: string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type tokensUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type tokensUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type tokensUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   token?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -438,6 +495,8 @@ export type tokensSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   user_id?: boolean
   token?: boolean
+  created_at?: boolean
+  updated_at?: boolean
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tokens"]>
 
@@ -447,9 +506,11 @@ export type tokensSelectScalar = {
   id?: boolean
   user_id?: boolean
   token?: boolean
+  created_at?: boolean
+  updated_at?: boolean
 }
 
-export type tokensOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "token", ExtArgs["result"]["tokens"]>
+export type tokensOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "token" | "created_at" | "updated_at", ExtArgs["result"]["tokens"]>
 export type tokensInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
@@ -460,9 +521,11 @@ export type $tokensPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     user: Prisma.$usersPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     user_id: number
     token: string
+    created_at: Date
+    updated_at: Date
   }, ExtArgs["result"]["tokens"]>
   composites: {}
 }
@@ -833,9 +896,11 @@ export interface Prisma__tokensClient<T, Null = never, ExtArgs extends runtime.T
  * Fields of the tokens model
  */
 export interface tokensFieldRefs {
-  readonly id: Prisma.FieldRef<"tokens", 'Int'>
+  readonly id: Prisma.FieldRef<"tokens", 'String'>
   readonly user_id: Prisma.FieldRef<"tokens", 'Int'>
   readonly token: Prisma.FieldRef<"tokens", 'String'>
+  readonly created_at: Prisma.FieldRef<"tokens", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"tokens", 'DateTime'>
 }
     
 

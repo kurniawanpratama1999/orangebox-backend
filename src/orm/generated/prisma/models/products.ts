@@ -29,23 +29,24 @@ export type AggregateProducts = {
 export type ProductsAvgAggregateOutputType = {
   id: number | null
   category_id: number | null
-  price: number | null
+  price: runtime.Decimal | null
 }
 
 export type ProductsSumAggregateOutputType = {
   id: number | null
   category_id: number | null
-  price: number | null
+  price: runtime.Decimal | null
 }
 
 export type ProductsMinAggregateOutputType = {
   id: number | null
   category_id: number | null
+  photo: string | null
   name: string | null
-  price: number | null
-  is_recommended: boolean | null
-  is_new: boolean | null
   description: string | null
+  price: runtime.Decimal | null
+  is_favorite: boolean | null
+  is_new: boolean | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -53,11 +54,12 @@ export type ProductsMinAggregateOutputType = {
 export type ProductsMaxAggregateOutputType = {
   id: number | null
   category_id: number | null
+  photo: string | null
   name: string | null
-  price: number | null
-  is_recommended: boolean | null
-  is_new: boolean | null
   description: string | null
+  price: runtime.Decimal | null
+  is_favorite: boolean | null
+  is_new: boolean | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -65,11 +67,12 @@ export type ProductsMaxAggregateOutputType = {
 export type ProductsCountAggregateOutputType = {
   id: number
   category_id: number
+  photo: number
   name: number
-  price: number
-  is_recommended: number
-  is_new: number
   description: number
+  price: number
+  is_favorite: number
+  is_new: number
   created_at: number
   updated_at: number
   _all: number
@@ -91,11 +94,12 @@ export type ProductsSumAggregateInputType = {
 export type ProductsMinAggregateInputType = {
   id?: true
   category_id?: true
+  photo?: true
   name?: true
-  price?: true
-  is_recommended?: true
-  is_new?: true
   description?: true
+  price?: true
+  is_favorite?: true
+  is_new?: true
   created_at?: true
   updated_at?: true
 }
@@ -103,11 +107,12 @@ export type ProductsMinAggregateInputType = {
 export type ProductsMaxAggregateInputType = {
   id?: true
   category_id?: true
+  photo?: true
   name?: true
-  price?: true
-  is_recommended?: true
-  is_new?: true
   description?: true
+  price?: true
+  is_favorite?: true
+  is_new?: true
   created_at?: true
   updated_at?: true
 }
@@ -115,11 +120,12 @@ export type ProductsMaxAggregateInputType = {
 export type ProductsCountAggregateInputType = {
   id?: true
   category_id?: true
+  photo?: true
   name?: true
-  price?: true
-  is_recommended?: true
-  is_new?: true
   description?: true
+  price?: true
+  is_favorite?: true
+  is_new?: true
   created_at?: true
   updated_at?: true
   _all?: true
@@ -214,11 +220,12 @@ export type productsGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type ProductsGroupByOutputType = {
   id: number
   category_id: number
+  photo: string
   name: string
-  price: number
-  is_recommended: boolean
-  is_new: boolean
   description: string
+  price: runtime.Decimal
+  is_favorite: boolean
+  is_new: boolean
   created_at: Date
   updated_at: Date
   _count: ProductsCountAggregateOutputType | null
@@ -249,11 +256,12 @@ export type productsWhereInput = {
   NOT?: Prisma.productsWhereInput | Prisma.productsWhereInput[]
   id?: Prisma.IntFilter<"products"> | number
   category_id?: Prisma.IntFilter<"products"> | number
+  photo?: Prisma.StringFilter<"products"> | string
   name?: Prisma.StringFilter<"products"> | string
-  price?: Prisma.FloatFilter<"products"> | number
-  is_recommended?: Prisma.BoolFilter<"products"> | boolean
-  is_new?: Prisma.BoolFilter<"products"> | boolean
   description?: Prisma.StringFilter<"products"> | string
+  price?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFilter<"products"> | boolean
+  is_new?: Prisma.BoolFilter<"products"> | boolean
   created_at?: Prisma.DateTimeFilter<"products"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
   category?: Prisma.XOR<Prisma.CategoriesScalarRelationFilter, Prisma.categoriesWhereInput>
@@ -262,11 +270,12 @@ export type productsWhereInput = {
 export type productsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   category_id?: Prisma.SortOrder
+  photo?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  is_recommended?: Prisma.SortOrder
-  is_new?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  is_favorite?: Prisma.SortOrder
+  is_new?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   category?: Prisma.categoriesOrderByWithRelationInput
@@ -275,28 +284,30 @@ export type productsOrderByWithRelationInput = {
 
 export type productsWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  name?: string
   AND?: Prisma.productsWhereInput | Prisma.productsWhereInput[]
   OR?: Prisma.productsWhereInput[]
   NOT?: Prisma.productsWhereInput | Prisma.productsWhereInput[]
   category_id?: Prisma.IntFilter<"products"> | number
-  name?: Prisma.StringFilter<"products"> | string
-  price?: Prisma.FloatFilter<"products"> | number
-  is_recommended?: Prisma.BoolFilter<"products"> | boolean
-  is_new?: Prisma.BoolFilter<"products"> | boolean
+  photo?: Prisma.StringFilter<"products"> | string
   description?: Prisma.StringFilter<"products"> | string
+  price?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFilter<"products"> | boolean
+  is_new?: Prisma.BoolFilter<"products"> | boolean
   created_at?: Prisma.DateTimeFilter<"products"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
   category?: Prisma.XOR<Prisma.CategoriesScalarRelationFilter, Prisma.categoriesWhereInput>
-}, "id">
+}, "id" | "name">
 
 export type productsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   category_id?: Prisma.SortOrder
+  photo?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  is_recommended?: Prisma.SortOrder
-  is_new?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  is_favorite?: Prisma.SortOrder
+  is_new?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.productsCountOrderByAggregateInput
@@ -312,21 +323,23 @@ export type productsScalarWhereWithAggregatesInput = {
   NOT?: Prisma.productsScalarWhereWithAggregatesInput | Prisma.productsScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"products"> | number
   category_id?: Prisma.IntWithAggregatesFilter<"products"> | number
+  photo?: Prisma.StringWithAggregatesFilter<"products"> | string
   name?: Prisma.StringWithAggregatesFilter<"products"> | string
-  price?: Prisma.FloatWithAggregatesFilter<"products"> | number
-  is_recommended?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
-  is_new?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   description?: Prisma.StringWithAggregatesFilter<"products"> | string
+  price?: Prisma.DecimalWithAggregatesFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
+  is_new?: Prisma.BoolWithAggregatesFilter<"products"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"products"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"products"> | Date | string
 }
 
 export type productsCreateInput = {
+  photo: string
   name: string
-  price: number
-  is_recommended?: boolean
-  is_new?: boolean
   description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: Date | string
   updated_at?: Date | string
   category: Prisma.categoriesCreateNestedOneWithoutProductsInput
@@ -335,21 +348,23 @@ export type productsCreateInput = {
 export type productsUncheckedCreateInput = {
   id?: number
   category_id: number
+  photo: string
   name: string
-  price: number
-  is_recommended?: boolean
-  is_new?: boolean
   description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type productsUpdateInput = {
+  photo?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  is_recommended?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.categoriesUpdateOneRequiredWithoutProductsNestedInput
@@ -358,11 +373,12 @@ export type productsUpdateInput = {
 export type productsUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   category_id?: Prisma.IntFieldUpdateOperationsInput | number
+  photo?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  is_recommended?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -370,21 +386,23 @@ export type productsUncheckedUpdateInput = {
 export type productsCreateManyInput = {
   id?: number
   category_id: number
+  photo: string
   name: string
-  price: number
-  is_recommended?: boolean
-  is_new?: boolean
   description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type productsUpdateManyMutationInput = {
+  photo?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  is_recommended?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -392,11 +410,12 @@ export type productsUpdateManyMutationInput = {
 export type productsUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   category_id?: Prisma.IntFieldUpdateOperationsInput | number
+  photo?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  is_recommended?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -420,11 +439,12 @@ export type productsOrderByRelevanceInput = {
 export type productsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   category_id?: Prisma.SortOrder
+  photo?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  is_recommended?: Prisma.SortOrder
-  is_new?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  is_favorite?: Prisma.SortOrder
+  is_new?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -438,11 +458,12 @@ export type productsAvgOrderByAggregateInput = {
 export type productsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   category_id?: Prisma.SortOrder
+  photo?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  is_recommended?: Prisma.SortOrder
-  is_new?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  is_favorite?: Prisma.SortOrder
+  is_new?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -450,11 +471,12 @@ export type productsMaxOrderByAggregateInput = {
 export type productsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   category_id?: Prisma.SortOrder
+  photo?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  is_recommended?: Prisma.SortOrder
-  is_new?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  is_favorite?: Prisma.SortOrder
+  is_new?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -507,12 +529,12 @@ export type productsUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -520,22 +542,24 @@ export type BoolFieldUpdateOperationsInput = {
 }
 
 export type productsCreateWithoutCategoryInput = {
+  photo: string
   name: string
-  price: number
-  is_recommended?: boolean
-  is_new?: boolean
   description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type productsUncheckedCreateWithoutCategoryInput = {
   id?: number
+  photo: string
   name: string
-  price: number
-  is_recommended?: boolean
-  is_new?: boolean
   description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -572,54 +596,59 @@ export type productsScalarWhereInput = {
   NOT?: Prisma.productsScalarWhereInput | Prisma.productsScalarWhereInput[]
   id?: Prisma.IntFilter<"products"> | number
   category_id?: Prisma.IntFilter<"products"> | number
+  photo?: Prisma.StringFilter<"products"> | string
   name?: Prisma.StringFilter<"products"> | string
-  price?: Prisma.FloatFilter<"products"> | number
-  is_recommended?: Prisma.BoolFilter<"products"> | boolean
-  is_new?: Prisma.BoolFilter<"products"> | boolean
   description?: Prisma.StringFilter<"products"> | string
+  price?: Prisma.DecimalFilter<"products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFilter<"products"> | boolean
+  is_new?: Prisma.BoolFilter<"products"> | boolean
   created_at?: Prisma.DateTimeFilter<"products"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"products"> | Date | string
 }
 
 export type productsCreateManyCategoryInput = {
   id?: number
+  photo: string
   name: string
-  price: number
-  is_recommended?: boolean
-  is_new?: boolean
   description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type productsUpdateWithoutCategoryInput = {
+  photo?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  is_recommended?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type productsUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  photo?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  is_recommended?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type productsUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  photo?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  is_recommended?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  is_favorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_new?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -629,11 +658,12 @@ export type productsUncheckedUpdateManyWithoutCategoryInput = {
 export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   category_id?: boolean
+  photo?: boolean
   name?: boolean
-  price?: boolean
-  is_recommended?: boolean
-  is_new?: boolean
   description?: boolean
+  price?: boolean
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: boolean
   updated_at?: boolean
   category?: boolean | Prisma.categoriesDefaultArgs<ExtArgs>
@@ -644,16 +674,17 @@ export type productsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type productsSelectScalar = {
   id?: boolean
   category_id?: boolean
+  photo?: boolean
   name?: boolean
-  price?: boolean
-  is_recommended?: boolean
-  is_new?: boolean
   description?: boolean
+  price?: boolean
+  is_favorite?: boolean
+  is_new?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "category_id" | "name" | "price" | "is_recommended" | "is_new" | "description" | "created_at" | "updated_at", ExtArgs["result"]["products"]>
+export type productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "category_id" | "photo" | "name" | "description" | "price" | "is_favorite" | "is_new" | "created_at" | "updated_at", ExtArgs["result"]["products"]>
 export type productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.categoriesDefaultArgs<ExtArgs>
 }
@@ -666,11 +697,12 @@ export type $productsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     category_id: number
+    photo: string
     name: string
-    price: number
-    is_recommended: boolean
-    is_new: boolean
     description: string
+    price: runtime.Decimal
+    is_favorite: boolean
+    is_new: boolean
     created_at: Date
     updated_at: Date
   }, ExtArgs["result"]["products"]>
@@ -1045,11 +1077,12 @@ export interface Prisma__productsClient<T, Null = never, ExtArgs extends runtime
 export interface productsFieldRefs {
   readonly id: Prisma.FieldRef<"products", 'Int'>
   readonly category_id: Prisma.FieldRef<"products", 'Int'>
+  readonly photo: Prisma.FieldRef<"products", 'String'>
   readonly name: Prisma.FieldRef<"products", 'String'>
-  readonly price: Prisma.FieldRef<"products", 'Float'>
-  readonly is_recommended: Prisma.FieldRef<"products", 'Boolean'>
-  readonly is_new: Prisma.FieldRef<"products", 'Boolean'>
   readonly description: Prisma.FieldRef<"products", 'String'>
+  readonly price: Prisma.FieldRef<"products", 'Decimal'>
+  readonly is_favorite: Prisma.FieldRef<"products", 'Boolean'>
+  readonly is_new: Prisma.FieldRef<"products", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"products", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"products", 'DateTime'>
 }

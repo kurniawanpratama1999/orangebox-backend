@@ -22,8 +22,6 @@ export * from './enums.ts';
  * 
  */
 export type users = Prisma.usersModel
-<<<<<<< HEAD
-=======
 /**
  * Model tokens
  * 
@@ -40,13 +38,52 @@ export type categories = Prisma.categoriesModel
  */
 export type products = Prisma.productsModel
 /**
- * Model profile_umkm
+ * Model umkm_name
  * 
  */
-export type profile_umkm = Prisma.profile_umkmModel
+export type umkm_name = Prisma.umkm_nameModel
 /**
- * Model profile_owner
+ * Model sosmed
  * 
  */
-export type profile_owner = Prisma.profile_ownerModel
->>>>>>> riyan-branch
+export type sosmed = Prisma.sosmedModel
+/**
+ * Model hero
+ * 
+ */
+export type hero = Prisma.heroModel
+/**
+ * Model favorite_menu
+ * 
+ */
+export type favorite_menu = Prisma.favorite_menuModel
+/**
+ * Model facility_and_place
+ * 
+ */
+export type facility_and_place = Prisma.facility_and_placeModel
+/**
+ * Model facilities_and_places
+ * 
+ */
+export type facilities_and_places = Prisma.facilities_and_placesModel
+/**
+ * Model more_cta
+ * 
+ */
+export type more_cta = Prisma.more_ctaModel
+/**
+ * Model testimoni
+ * 
+ */
+export type testimoni = Prisma.testimoniModel
+/**
+ * Model testimonies
+ * 
+ */
+export type testimonies = Prisma.testimoniesModel
+/**
+ * Model location
+ * 
+ */
+export type location = Prisma.locationModel

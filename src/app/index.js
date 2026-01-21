@@ -1,17 +1,12 @@
 import { UserRoutes } from "#routes/user.routes.js";
 import express from "express";
-<<<<<<< HEAD
 
-export const app = express();
-
-=======
 import cors from "cors";
 
 export const app = express();
 
 app.use(cors());
 
->>>>>>> riyan-branch
 app.get("/", (req, res) => {
   res.send("Hello World");
 });

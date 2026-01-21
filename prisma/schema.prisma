@@ -8,34 +8,31 @@ datasource db {
 }
 
 model users {
-<<<<<<< HEAD
-  id Int @id @default(autoincrement())
-  name String
-=======
+
   id       Int    @id @default(autoincrement())
   name     String
->>>>>>> riyan-branch
-  username String
+  username String @unique
   password String @db.LongText
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
-<<<<<<< HEAD
-}
-=======
   tokens     tokens[]
 }
 
 model tokens {
-  id      String @id @default(uuid())
+  id      String @id
   user_id Int    @unique
   token   String @db.LongText
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
   user    users  @relation(fields: [user_id], references: [id])
 }
 
 model categories {
   id          Int        @id @default(autoincrement())
-  name        String
+  name        String     @unique
   description String     @db.LongText
   products    products[]
 }
@@ -43,32 +40,92 @@ model categories {
 model products {
   id             Int     @id @default(autoincrement())
   category_id    Int
-  name           String
-  price          Float
-  is_recommended Boolean @default(false)
-  is_new         Boolean @default(false)
+  photo          String  @db.LongText
+  name           String  @unique
   description    String  @db.LongText
+  price          Decimal
+
+  is_favorite    Boolean @default(false)
+  is_new         Boolean @default(false)
 
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now()) @updatedAt
+
   category   categories @relation(fields: [category_id], references: [id])
 }
 
-model profile_umkm {
-  id          Int    @id @default(autoincrement())
-  name        String
+
+model umkm_name {
+  name        String @unique
   address     String @db.LongText
-  phone       String
-  email       String
-  website     String
-  photo       String @db.LongText
+}
+
+model sosmed {
+  id   Int @id @default(autoincrement())
+  name String @unique
+  description String
+  link String @db.LongText
+
+  more_cta more_cta?
+
+  button_location1 location[] @relation("link1")
+  button_location2 location[] @relation("link2")
+}
+
+model hero {
+  headline String @unique
+  photo String @db.LongText
+  subheadline String
   description String @db.LongText
 }
 
-model profile_owner {
-  id          Int    @id @default(autoincrement())
-  name        String
-  photo       String @db.LongText
-  description String @db.LongText
+model favorite_menu {
+  title String @unique
+  information String
+  max_show_product Int
 }
->>>>>>> riyan-branch
+
+model facility_and_place {
+  title String @unique
+  information String
+}
+
+model facilities_and_places {
+  id Int @id @default(autoincrement())
+  photo String @db.LongText
+  name String
+}
+
+model more_cta {
+  title String @unique
+  button String
+  link_id Int @unique
+
+  sosmed sosmed @relation(fields: [link_id], references: [id])
+}
+
+model testimoni {
+  title String @unique
+  information String
+}
+
+model testimonies {
+  id Int @id @default(autoincrement())
+  photo String? @db.LongText
+  name String
+  description String
+}
+
+model location {
+  title String @unique
+  photo String @db.LongText
+
+  button1 String
+  link1_id Int
+
+  button2 String
+  link2_id Int
+
+  link1 sosmed @relation("link1",fields: [link1_id], references: [id])
+  link2 sosmed @relation("link2",fields: [link2_id], references: [id])
+}

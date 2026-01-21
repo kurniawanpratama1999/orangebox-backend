@@ -224,6 +224,10 @@ export type usersWhereInput = {
   password?: Prisma.StringFilter<"users"> | string
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"users"> | Date | string
+<<<<<<< HEAD
+=======
+  tokens?: Prisma.TokensListRelationFilter
+>>>>>>> riyan-branch
 }
 
 export type usersOrderByWithRelationInput = {
@@ -233,6 +237,10 @@ export type usersOrderByWithRelationInput = {
   password?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
+<<<<<<< HEAD
+=======
+  tokens?: Prisma.tokensOrderByRelationAggregateInput
+>>>>>>> riyan-branch
   _relevance?: Prisma.usersOrderByRelevanceInput
 }
 
@@ -246,6 +254,10 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   password?: Prisma.StringFilter<"users"> | string
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"users"> | Date | string
+<<<<<<< HEAD
+=======
+  tokens?: Prisma.TokensListRelationFilter
+>>>>>>> riyan-branch
 }, "id">
 
 export type usersOrderByWithAggregationInput = {
@@ -280,6 +292,10 @@ export type usersCreateInput = {
   password: string
   created_at?: Date | string
   updated_at?: Date | string
+<<<<<<< HEAD
+=======
+  tokens?: Prisma.tokensCreateNestedManyWithoutUserInput
+>>>>>>> riyan-branch
 }
 
 export type usersUncheckedCreateInput = {
@@ -289,6 +305,10 @@ export type usersUncheckedCreateInput = {
   password: string
   created_at?: Date | string
   updated_at?: Date | string
+<<<<<<< HEAD
+=======
+  tokens?: Prisma.tokensUncheckedCreateNestedManyWithoutUserInput
+>>>>>>> riyan-branch
 }
 
 export type usersUpdateInput = {
@@ -297,6 +317,10 @@ export type usersUpdateInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+<<<<<<< HEAD
+=======
+  tokens?: Prisma.tokensUpdateManyWithoutUserNestedInput
+>>>>>>> riyan-branch
 }
 
 export type usersUncheckedUpdateInput = {
@@ -306,6 +330,10 @@ export type usersUncheckedUpdateInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+<<<<<<< HEAD
+=======
+  tokens?: Prisma.tokensUncheckedUpdateManyWithoutUserNestedInput
+>>>>>>> riyan-branch
 }
 
 export type usersCreateManyInput = {
@@ -375,6 +403,14 @@ export type usersSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+<<<<<<< HEAD
+=======
+export type UsersScalarRelationFilter = {
+  is?: Prisma.usersWhereInput
+  isNot?: Prisma.usersWhereInput
+}
+
+>>>>>>> riyan-branch
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -391,6 +427,102 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+<<<<<<< HEAD
+=======
+export type usersCreateNestedOneWithoutTokensInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutTokensInput, Prisma.usersUncheckedCreateWithoutTokensInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutTokensInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutTokensInput, Prisma.usersUncheckedCreateWithoutTokensInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutTokensInput
+  upsert?: Prisma.usersUpsertWithoutTokensInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutTokensInput, Prisma.usersUpdateWithoutTokensInput>, Prisma.usersUncheckedUpdateWithoutTokensInput>
+}
+
+export type usersCreateWithoutTokensInput = {
+  name: string
+  username: string
+  password: string
+  created_at?: Date | string
+  updated_at?: Date | string
+}
+
+export type usersUncheckedCreateWithoutTokensInput = {
+  id?: number
+  name: string
+  username: string
+  password: string
+  created_at?: Date | string
+  updated_at?: Date | string
+}
+
+export type usersCreateOrConnectWithoutTokensInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutTokensInput, Prisma.usersUncheckedCreateWithoutTokensInput>
+}
+
+export type usersUpsertWithoutTokensInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutTokensInput, Prisma.usersUncheckedUpdateWithoutTokensInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutTokensInput, Prisma.usersUncheckedCreateWithoutTokensInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutTokensInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutTokensInput, Prisma.usersUncheckedUpdateWithoutTokensInput>
+}
+
+export type usersUpdateWithoutTokensInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type usersUncheckedUpdateWithoutTokensInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type UsersCountOutputType
+ */
+
+export type UsersCountOutputType = {
+  tokens: number
+}
+
+export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tokens?: boolean | UsersCountOutputTypeCountTokensArgs
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UsersCountOutputType
+   */
+  select?: Prisma.UsersCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.tokensWhereInput
+}
+>>>>>>> riyan-branch
 
 
 export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -400,6 +532,11 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   password?: boolean
   created_at?: boolean
   updated_at?: boolean
+<<<<<<< HEAD
+=======
+  tokens?: boolean | Prisma.users$tokensArgs<ExtArgs>
+  _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
+>>>>>>> riyan-branch
 }, ExtArgs["result"]["users"]>
 
 
@@ -414,10 +551,23 @@ export type usersSelectScalar = {
 }
 
 export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "password" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+<<<<<<< HEAD
 
 export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "users"
   objects: {}
+=======
+export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tokens?: boolean | Prisma.users$tokensArgs<ExtArgs>
+  _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
+}
+
+export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  name: "users"
+  objects: {
+    tokens: Prisma.$tokensPayload<ExtArgs>[]
+  }
+>>>>>>> riyan-branch
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
@@ -765,6 +915,10 @@ readonly fields: usersFieldRefs;
  */
 export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+<<<<<<< HEAD
+=======
+  tokens<T extends Prisma.users$tokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$tokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+>>>>>>> riyan-branch
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -817,6 +971,13 @@ export type usersFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * Filter, which users to fetch.
    */
   where: Prisma.usersWhereUniqueInput
@@ -835,6 +996,13 @@ export type usersFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * Filter, which users to fetch.
    */
   where: Prisma.usersWhereUniqueInput
@@ -853,6 +1021,13 @@ export type usersFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * Filter, which users to fetch.
    */
   where?: Prisma.usersWhereInput
@@ -901,6 +1076,13 @@ export type usersFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * Filter, which users to fetch.
    */
   where?: Prisma.usersWhereInput
@@ -949,6 +1131,13 @@ export type usersFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * Filter, which users to fetch.
    */
   where?: Prisma.usersWhereInput
@@ -992,6 +1181,13 @@ export type usersCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * The data needed to create a users.
    */
   data: Prisma.XOR<Prisma.usersCreateInput, Prisma.usersUncheckedCreateInput>
@@ -1021,6 +1217,13 @@ export type usersUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * The data needed to update a users.
    */
   data: Prisma.XOR<Prisma.usersUpdateInput, Prisma.usersUncheckedUpdateInput>
@@ -1061,6 +1264,13 @@ export type usersUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * The filter to search for the users to update in case it exists.
    */
   where: Prisma.usersWhereUniqueInput
@@ -1087,6 +1297,13 @@ export type usersDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
   /**
+<<<<<<< HEAD
+=======
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  /**
+>>>>>>> riyan-branch
    * Filter which users to delete.
    */
   where: Prisma.usersWhereUniqueInput
@@ -1107,6 +1324,33 @@ export type usersDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * users.tokens
+ */
+export type users$tokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tokens
+   */
+  select?: Prisma.tokensSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tokens
+   */
+  omit?: Prisma.tokensOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.tokensInclude<ExtArgs> | null
+  where?: Prisma.tokensWhereInput
+  orderBy?: Prisma.tokensOrderByWithRelationInput | Prisma.tokensOrderByWithRelationInput[]
+  cursor?: Prisma.tokensWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TokensScalarFieldEnum | Prisma.TokensScalarFieldEnum[]
+}
+
+/**
+>>>>>>> riyan-branch
  * users without action
  */
 export type usersDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1118,4 +1362,11 @@ export type usersDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the users
    */
   omit?: Prisma.usersOmit<ExtArgs> | null
+<<<<<<< HEAD
+=======
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+>>>>>>> riyan-branch
 }

@@ -44,3 +44,31 @@ export { Prisma }
  * 
  */
 export type users = Prisma.usersModel
+<<<<<<< HEAD
+=======
+/**
+ * Model tokens
+ * 
+ */
+export type tokens = Prisma.tokensModel
+/**
+ * Model categories
+ * 
+ */
+export type categories = Prisma.categoriesModel
+/**
+ * Model products
+ * 
+ */
+export type products = Prisma.productsModel
+/**
+ * Model profile_umkm
+ * 
+ */
+export type profile_umkm = Prisma.profile_umkmModel
+/**
+ * Model profile_owner
+ * 
+ */
+export type profile_owner = Prisma.profile_ownerModel
+>>>>>>> riyan-branch

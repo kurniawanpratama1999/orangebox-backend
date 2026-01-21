@@ -17,12 +17,21 @@ export const UserController = {
   async show(req, res) {
     const userId = req.params.id;
 
+<<<<<<< HEAD
     if (!userId) {
       return Flash.fail(res, {
         status: HTTP_FAILED.BAD_REQUEST,
         code: "ParamsIdNotFound",
       });
     }
+=======
+    // if (!userId) {
+    //   return Flash.fail(res, {
+    //     status: HTTP_FAILED.BAD_REQUEST,
+    //     code: "ParamsIdNotFound",
+    //   });
+    // }
+>>>>>>> riyan-branch
 
     const id = Number(userId);
 

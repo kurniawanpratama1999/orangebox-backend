@@ -20,7 +20,11 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "mysql",
+<<<<<<< HEAD
   "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/orm/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nmodel users {\n  id       Int    @id @default(autoincrement())\n  name     String\n  username String\n  password String @db.LongText\n\n  created_at DateTime @default(now())\n  updated_at DateTime @default(now()) @updatedAt\n}\n",
+=======
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/orm/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nmodel users {\n  id       Int    @id @default(autoincrement())\n  name     String\n  username String\n  password String @db.LongText\n\n  created_at DateTime @default(now())\n  updated_at DateTime @default(now()) @updatedAt\n  tokens     tokens[]\n}\n\nmodel tokens {\n  id      Int    @id @default(autoincrement())\n  user_id Int\n  token   String @db.LongText\n  user    users  @relation(fields: [user_id], references: [id])\n}\n\nmodel categories {\n  id          Int        @id @default(autoincrement())\n  name        String\n  description String     @db.LongText\n  products    products[]\n}\n\nmodel products {\n  id             Int     @id @default(autoincrement())\n  category_id    Int\n  name           String\n  price          Float\n  is_recommended Boolean @default(false)\n  is_new         Boolean @default(false)\n  description    String  @db.LongText\n\n  created_at DateTime   @default(now())\n  updated_at DateTime   @default(now()) @updatedAt\n  category   categories @relation(fields: [category_id], references: [id])\n}\n\nmodel profile_umkm {\n  id          Int    @id @default(autoincrement())\n  name        String\n  address     String @db.LongText\n  phone       String\n  email       String\n  website     String\n  photo       String @db.LongText\n  description String @db.LongText\n}\n\nmodel profile_owner {\n  id          Int    @id @default(autoincrement())\n  name        String\n  photo       String @db.LongText\n  description String @db.LongText\n}\n",
+>>>>>>> riyan-branch
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +32,11 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
+<<<<<<< HEAD
 config.runtimeDataModel = JSON.parse("{\"models\":{\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+=======
+config.runtimeDataModel = JSON.parse("{\"models\":{\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tokens\",\"kind\":\"object\",\"type\":\"tokens\",\"relationName\":\"tokensTousers\"}],\"dbName\":null},\"tokens\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"tokensTousers\"}],\"dbName\":null},\"categories\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"products\",\"relationName\":\"categoriesToproducts\"}],\"dbName\":null},\"products\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"category_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"is_recommended\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"is_new\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"category\",\"kind\":\"object\",\"type\":\"categories\",\"relationName\":\"categoriesToproducts\"}],\"dbName\":null},\"profile_umkm\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"website\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"profile_owner\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+>>>>>>> riyan-branch
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -183,6 +191,59 @@ export interface PrismaClient<
     * ```
     */
   get users(): Prisma.usersDelegate<ExtArgs, { omit: OmitOpts }>;
+<<<<<<< HEAD
+=======
+
+  /**
+   * `prisma.tokens`: Exposes CRUD operations for the **tokens** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tokens
+    * const tokens = await prisma.tokens.findMany()
+    * ```
+    */
+  get tokens(): Prisma.tokensDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.categories`: Exposes CRUD operations for the **categories** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Categories
+    * const categories = await prisma.categories.findMany()
+    * ```
+    */
+  get categories(): Prisma.categoriesDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.products`: Exposes CRUD operations for the **products** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Products
+    * const products = await prisma.products.findMany()
+    * ```
+    */
+  get products(): Prisma.productsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.profile_umkm`: Exposes CRUD operations for the **profile_umkm** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Profile_umkms
+    * const profile_umkms = await prisma.profile_umkm.findMany()
+    * ```
+    */
+  get profile_umkm(): Prisma.profile_umkmDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.profile_owner`: Exposes CRUD operations for the **profile_owner** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Profile_owners
+    * const profile_owners = await prisma.profile_owner.findMany()
+    * ```
+    */
+  get profile_owner(): Prisma.profile_ownerDelegate<ExtArgs, { omit: OmitOpts }>;
+>>>>>>> riyan-branch
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

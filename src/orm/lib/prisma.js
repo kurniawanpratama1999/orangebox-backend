@@ -1,6 +1,10 @@
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "#orm/generated/prisma/client.ts";
 import { env } from "#config/env.js";
+<<<<<<< HEAD
+=======
+import "dotenv/config";
+>>>>>>> riyan-branch
 
 const db = env.database;
 const adapter = new PrismaMariaDb({

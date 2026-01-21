@@ -8,11 +8,67 @@ datasource db {
 }
 
 model users {
+<<<<<<< HEAD
   id Int @id @default(autoincrement())
   name String
+=======
+  id       Int    @id @default(autoincrement())
+  name     String
+>>>>>>> riyan-branch
   username String
   password String @db.LongText
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+<<<<<<< HEAD
 }
+=======
+  tokens     tokens[]
+}
+
+model tokens {
+  id      String @id @default(uuid())
+  user_id Int    @unique
+  token   String @db.LongText
+  user    users  @relation(fields: [user_id], references: [id])
+}
+
+model categories {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String     @db.LongText
+  products    products[]
+}
+
+model products {
+  id             Int     @id @default(autoincrement())
+  category_id    Int
+  name           String
+  price          Float
+  is_recommended Boolean @default(false)
+  is_new         Boolean @default(false)
+  description    String  @db.LongText
+
+  created_at DateTime   @default(now())
+  updated_at DateTime   @default(now()) @updatedAt
+  category   categories @relation(fields: [category_id], references: [id])
+}
+
+model profile_umkm {
+  id          Int    @id @default(autoincrement())
+  name        String
+  address     String @db.LongText
+  phone       String
+  email       String
+  website     String
+  photo       String @db.LongText
+  description String @db.LongText
+}
+
+model profile_owner {
+  id          Int    @id @default(autoincrement())
+  name        String
+  photo       String @db.LongText
+  description String @db.LongText
+}
+>>>>>>> riyan-branch

@@ -15,7 +15,7 @@ model users {
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
-  tokens     tokens[]
+  tokens     tokens?
 }
 
 model tokens {
@@ -59,7 +59,7 @@ model umkm_name {
   address     String @db.LongText
 }
 
-model sosmed {
+model sosmeds {
   id   Int @id @default(autoincrement())
   name String @unique
   description String
@@ -100,7 +100,7 @@ model more_cta {
   button String
   link_id Int @unique
 
-  sosmed sosmed @relation(fields: [link_id], references: [id])
+  sosmed sosmeds @relation(fields: [link_id], references: [id])
 }
 
 model testimoni {
@@ -125,6 +125,6 @@ model location {
   button2 String
   link2_id Int
 
-  link1 sosmed @relation("link1",fields: [link1_id], references: [id])
-  link2 sosmed @relation("link2",fields: [link2_id], references: [id])
+  link1 sosmeds @relation("link1",fields: [link1_id], references: [id])
+  link2 sosmeds @relation("link2",fields: [link2_id], references: [id])
 }

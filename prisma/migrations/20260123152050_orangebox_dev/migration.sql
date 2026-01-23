@@ -59,13 +59,13 @@ CREATE TABLE `umkm_name` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `sosmed` (
+CREATE TABLE `sosmeds` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NOT NULL,
     `link` LONGTEXT NOT NULL,
 
-    UNIQUE INDEX `sosmed_name_key`(`name`),
+    UNIQUE INDEX `sosmeds_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -152,10 +152,10 @@ ALTER TABLE `tokens` ADD CONSTRAINT `tokens_user_id_fkey` FOREIGN KEY (`user_id`
 ALTER TABLE `products` ADD CONSTRAINT `products_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `more_cta` ADD CONSTRAINT `more_cta_link_id_fkey` FOREIGN KEY (`link_id`) REFERENCES `sosmed`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `more_cta` ADD CONSTRAINT `more_cta_link_id_fkey` FOREIGN KEY (`link_id`) REFERENCES `sosmeds`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `location` ADD CONSTRAINT `location_link1_id_fkey` FOREIGN KEY (`link1_id`) REFERENCES `sosmed`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `location` ADD CONSTRAINT `location_link1_id_fkey` FOREIGN KEY (`link1_id`) REFERENCES `sosmeds`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `location` ADD CONSTRAINT `location_link2_id_fkey` FOREIGN KEY (`link2_id`) REFERENCES `sosmed`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `location` ADD CONSTRAINT `location_link2_id_fkey` FOREIGN KEY (`link2_id`) REFERENCES `sosmeds`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

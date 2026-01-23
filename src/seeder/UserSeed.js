@@ -1,12 +1,12 @@
 import { prisma } from "#orm/lib/prisma.js";
 import { Hash } from "#utils/Hash.js";
 
-const UserSeed = async () => {
+export const UserSeed = async () => {
   const user = await prisma.users.create({
     data: {
-      name: "operator",
-      password: await Hash.make("operator#123"),
-      username: "operator",
+      name: "admin toko",
+      password: await Hash.make("admin#123"),
+      username: "admintoko",
     },
   });
 
@@ -16,13 +16,3 @@ const UserSeed = async () => {
 
   console.log("All User:", allUser);
 };
-
-UserSeed()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (error) => {
-    console.log(error);
-    await prisma.$disconnect();
-    process.exit(1);
-  });

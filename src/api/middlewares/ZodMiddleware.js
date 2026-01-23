@@ -24,9 +24,6 @@ export const ZodMiddleware = (ZodObject) => (req, res, next) => {
         error: obj,
       });
     }
-    return Flash.fail(res, {
-      code: "SomethingWrong",
-      status: HTTP_FAILED.BAD_REQUEST,
-    });
+    return next(error);
   }
 };

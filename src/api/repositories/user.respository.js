@@ -41,7 +41,10 @@ export const UserRepository = {
 
   async showByUsername(username) {
     // untuk verifikasi login
-    return await prisma.users.findUnique({ where: { username } });
+    return await prisma.users.findUnique({
+      include: { tokens: true },
+      where: { username },
+    });
   },
 
   async updatePassword(id, { password }) {

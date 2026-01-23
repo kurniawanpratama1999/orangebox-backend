@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "seeder": "node src/seeder/RunSeeder.js",
     "start": "nodemon ./src/server"
   },
   "keywords": [],

@@ -15,7 +15,7 @@ model users {
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
-  tokens     tokens[]
+  tokens     tokens?
 }
 
 model tokens {

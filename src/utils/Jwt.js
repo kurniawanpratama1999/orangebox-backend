@@ -1,42 +1,34 @@
 import { env } from "#config/env.js";
-import {
-  JsonWebTokenError,
-  sign,
-  TokenExpiredError,
-  verify,
-} from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 import { AppError } from "./AppError.js";
 import { HTTP_FAILED } from "./Flash.js";
 
 const tokenEnv = env.token;
 export const jwt = {
   createRefreshToken(sub, jti) {
-    return sign({}, tokenEnv.refresh, {
-      subject: sub,
+    return jsonwebtoken.sign({}, tokenEnv.refresh, {
+      subject: String(sub),
       expiresIn: "15m",
       jwtid: jti,
     });
   },
 
   createAccessToken(sub) {
-    return sign({}, tokenEnv.access, {
-      subject: sub,
+    return jsonwebtoken.sign({}, tokenEnv.access, {
+      subject: String(sub),
       expiresIn: "1m",
     });
   },
 
-  verifyRefreshToken(token, sub, jti) {
+  verifyRefreshToken(token) {
     try {
-      return verify(token, tokenEnv.refresh, {
-        subject: sub,
-        jwtid: jti,
-      });
+      return jsonwebtoken.verify(token, tokenEnv.refresh);
     } catch (error) {
-      if (error instanceof TokenExpiredError) {
+      if (error instanceof jsonwebtoken.TokenExpiredError) {
         throw new AppError("CredentialExpired", HTTP_FAILED.UNAUTHORIZED);
       }
 
-      if (error instanceof JsonWebTokenError) {
+      if (error instanceof jsonwebtoken.JsonWebTokenError) {
         throw new AppError("InvalidToken", HTTP_FAILED.UNAUTHORIZED);
       }
 
@@ -44,17 +36,15 @@ export const jwt = {
     }
   },
 
-  verifyAccessToken(token, sub) {
+  verifyAccessToken(token) {
     try {
-      return verify(token, tokenEnv.access, {
-        subject: sub,
-      });
+      return jsonwebtoken.verify(token, tokenEnv.access);
     } catch (error) {
-      if (error instanceof TokenExpiredError) {
+      if (error instanceof jsonwebtoken.TokenExpiredError) {
         throw new AppError("AccessExpired", HTTP_FAILED.UNAUTHORIZED);
       }
 
-      if (error instanceof JsonWebTokenError) {
+      if (error instanceof jsonwebtoken.JsonWebTokenError) {
         throw new AppError("InvalidToken", HTTP_FAILED.UNAUTHORIZED);
       }
 

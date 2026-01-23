@@ -11,10 +11,10 @@ export const TokenRepository = {
     });
   },
 
-  async update(jti, hashToken) {
+  async update(oldJti, newJti, hashToken) {
     return prisma.tokens.update({
-      data: { id: jti, token: hashToken },
-      where: { id: jti },
+      data: { id: newJti, token: hashToken },
+      where: { id: oldJti },
     });
   },
 

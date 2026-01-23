@@ -42,7 +42,7 @@ export const UserService = {
         password: hashPassword,
       });
     } catch (error) {
-      HandlePrismaError(error, {
+      throw HandlePrismaError(error, {
         P2002: {
           code: "UsernameAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -54,7 +54,7 @@ export const UserService = {
     try {
       return await UserRepository.update(id, { name, username });
     } catch (error) {
-      HandlePrismaError(error, {
+      throw HandlePrismaError(error, {
         P2002: {
           code: "UsernameAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -79,7 +79,7 @@ export const UserService = {
         password: hashPassword,
       });
     } catch (error) {
-      HandlePrismaError(error, {
+      throw HandlePrismaError(error, {
         P2025: {
           code: "UserIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
@@ -91,7 +91,7 @@ export const UserService = {
     try {
       return await UserRepository.destroy(id);
     } catch (error) {
-      HandlePrismaError(error, {
+      throw HandlePrismaError(error, {
         P2003: {
           code: "UserInUse",
           status: HTTP_FAILED.BAD_REQUEST,

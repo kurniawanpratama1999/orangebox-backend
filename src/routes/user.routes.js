@@ -10,16 +10,16 @@ UserRoutes.get("/:id", UserController.show);
 UserRoutes.post(
   "/",
   ZodMiddleware(UserValidation.create),
-  UserController.create
+  UserController.create,
 );
 UserRoutes.put(
   "/:id",
   ZodMiddleware(UserValidation.update),
-  UserController.update
+  UserController.update,
 );
 UserRoutes.patch(
   "/:id",
   ZodMiddleware(UserValidation.updatePassword),
-  UserController.updatePassword
+  UserController.updatePassword,
 );
 UserRoutes.delete("/:id", UserController.destroy);

@@ -1,19 +1,10 @@
 import { HTTP_FAILED } from "#utils/Flash.js";
+import { AppError } from "./AppError.js";
 
 export const HandlePrismaError = (error, map) => {
   if (error?.code && map[error.code]) {
-    return {
-      ok: false,
-      status: HTTP_FAILED.UNPROCESSABLE_ENTITY,
-      code: map[error.code],
-      data: null,
-    };
+    throw new AppError(map[error.code].code, map[error.code].status);
   }
 
-  return {
-    ok: false,
-    status: HTTP_FAILED.INTERNAL_SERVER_ERROR,
-    code: "InternalServerError",
-    data: null,
-  };
+  throw new AppError("DataNotProccess", HTTP_FAILED.UNPROCESSABLE_ENTITY);
 };

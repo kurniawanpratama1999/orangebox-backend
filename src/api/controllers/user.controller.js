@@ -1,146 +1,147 @@
 import { UserService } from "#api/services/user.service.js";
-import { Flash, HTTP_FAILED } from "#utils/Flash.js";
+import { AppError } from "#utils/AppError.js";
+import { Flash, HTTP_FAILED, HTTP_SUCCESS } from "#utils/Flash.js";
 
 export const UserController = {
-  async index(req, res) {
-    const user = await UserService.index();
+  async index(req, res, next) {
+    try {
+      const user = await UserService.index();
 
-    return user.ok
-      ? Flash.success(res, {
-          code: user.code,
-          status: user.status,
-          data: user.data,
-        })
-      : Flash.fail(res, { code: user.code, status: user.status });
+      return Flash.success(res, {
+        code: "GetUsersIsSuccess",
+        status: HTTP_SUCCESS.ACCEPTED,
+        data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async show(req, res) {
-    const userId = req.params.id;
+  async show(req, res, next) {
+    try {
+      const userId = req.params.id;
+      if (!userId) {
+        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      }
 
-    const id = Number(userId);
+      const id = Number(userId);
 
-    if (Number.isNaN(id)) {
-      return Flash.fail(res, {
-        status: HTTP_FAILED.BAD_REQUEST,
-        code: "InvalidUserId",
+      if (Number.isNaN(id)) {
+        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
+      }
+
+      const user = await UserService.showById(id);
+
+      return Flash.success(res, {
+        code: "GetUserIsSuccess",
+        status: HTTP_SUCCESS.OK,
+        data: user,
       });
+    } catch (error) {
+      next(error);
     }
-    const user = await UserService.showById(id);
-
-    return user.ok
-      ? Flash.success(res, {
-          code: user.code,
-          status: user.status,
-          data: user.data,
-        })
-      : Flash.fail(res, { code: user.code, status: user.status });
   },
 
-  async create(req, res) {
-    const body = req.body;
+  async create(req, res, next) {
+    try {
+      const body = req.body;
 
-    const user = await UserService.create({
-      name: body.name,
-      username: body.username,
-      password: body.password,
-      password_confirmation: body.password_confirmation,
-    });
+      const user = await UserService.create({
+        name: body.name,
+        username: body.username,
+        password: body.password,
+        password_confirmation: body.password_confirmation,
+      });
 
-    return user.ok
-      ? Flash.success(res, {
-          code: user.code,
-          status: user.status,
-          data: user.data,
-        })
-      : Flash.fail(res, { code: user.code, status: user.status });
+      return Flash.success(res, {
+        code: "CreateNewUserIsSuccess",
+        status: HTTP_SUCCESS.CREATED,
+        data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async update(req, res) {
-    const userId = req.params.id;
-    if (!userId) {
-      return Flash.fail(res, {
-        status: HTTP_FAILED.BAD_REQUEST,
-        code: "ParamsIdNotFound",
-      });
-    }
-    const id = Number(userId);
-    if (Number.isNaN(id)) {
-      return Flash.fail(res, {
-        status: HTTP_FAILED.BAD_REQUEST,
-        code: "InvalidUserId",
-      });
-    }
+  async update(req, res, next) {
+    try {
+      const userId = req.params.id;
+      if (!userId) {
+        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      }
 
-    const body = req.body;
-    const user = await UserService.update(id, {
-      name: body.name,
-      username: body.username,
-    });
+      const id = Number(userId);
 
-    return user.ok
-      ? Flash.success(res, {
-          code: user.code,
-          status: user.status,
-          data: user.data,
-        })
-      : Flash.fail(res, { code: user.code, status: user.status });
+      if (Number.isNaN(id)) {
+        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
+      }
+
+      const body = req.body;
+      await UserService.update(id, {
+        name: body.name,
+        username: body.username,
+      });
+
+      return Flash.success(res, {
+        code: "UpdateUserIsSuccess",
+        status: HTTP_SUCCESS.OK,
+        data: null,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async updatePassword(req, res) {
-    const userId = req.params.id;
-    if (!userId) {
-      return Flash.fail(res, {
-        status: HTTP_FAILED.BAD_REQUEST,
-        code: "ParamsIdNotFound",
-      });
-    }
-    const id = Number(userId);
-    if (Number.isNaN(id)) {
-      return Flash.fail(res, {
-        status: HTTP_FAILED.BAD_REQUEST,
-        code: "InvalidUserId",
-      });
-    }
+  async updatePassword(req, res, next) {
+    try {
+      const userId = req.params.id;
+      if (!userId) {
+        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      }
 
-    const body = req.body;
-    const user = await UserService.updatePassword(id, {
-      password: body.password,
-      password_confirmation: body.password_confirmation,
-    });
+      const id = Number(userId);
 
-    return user.ok
-      ? Flash.success(res, {
-          code: user.code,
-          status: user.status,
-          data: user.data,
-        })
-      : Flash.fail(res, { code: user.code, status: user.status });
+      if (Number.isNaN(id)) {
+        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
+      }
+
+      const body = req.body;
+      await UserService.updatePassword(id, {
+        password: body.password,
+        password_confirmation: body.password_confirmation,
+      });
+
+      return Flash.success(res, {
+        code: "UpdatePasswordIsSuccess",
+        status: HTTP_SUCCESS.OK,
+        data: null,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
-  async destroy(req, res) {
-    const userId = req.params.id;
+  async destroy(req, res, next) {
+    try {
+      const userId = req.params.id;
+      if (!userId) {
+        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      }
 
-    if (!userId) {
-      return Flash.fail(res, {
-        status: HTTP_FAILED.BAD_REQUEST,
-        code: "ParamsIdNotFound",
+      const id = Number(userId);
+
+      if (Number.isNaN(id)) {
+        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
+      }
+
+      await UserService.destroy(id);
+
+      return Flash.success(res, {
+        code: "DeleteUserIsSuccess",
+        status: HTTP_SUCCESS.NO_CONTENT,
+        data: null,
       });
+    } catch (error) {
+      next(error);
     }
-    const id = Number(userId);
-    if (Number.isNaN(id)) {
-      return Flash.fail(res, {
-        status: HTTP_FAILED.BAD_REQUEST,
-        code: "InvalidUserId",
-      });
-    }
-
-    const user = await UserService.destroy(id);
-
-    return user.ok
-      ? Flash.success(res, {
-          code: user.code,
-          status: user.status,
-          data: user.data,
-        })
-      : Flash.fail(res, { code: user.code, status: user.status });
   },
 };

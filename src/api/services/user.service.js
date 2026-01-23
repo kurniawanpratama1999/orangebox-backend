@@ -1,103 +1,68 @@
 import { UserRepository } from "#api/repositories/user.respository.js";
-import { HTTP_FAILED, HTTP_SUCCESS } from "#utils/Flash.js";
+import { AppError } from "#utils/AppError.js";
+import { HTTP_FAILED } from "#utils/Flash.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
 import { Hash } from "#utils/Hash.js";
 
 export const UserService = {
   async index() {
-    const users = await UserRepository.index();
-
-    return {
-      ok: true,
-      status: HTTP_SUCCESS.OK,
-      code: "FindAllUser",
-      data: users,
-    };
+    return await UserRepository.index();
   },
 
   async showById(id) {
     const user = await UserRepository.show(id);
     if (!user) {
-      return {
-        ok: false,
-        status: HTTP_FAILED.NOT_FOUND,
-        code: "UserNotFound",
-        data: null,
-      };
+      throw new AppError("UserNotFound", HTTP_FAILED.NOT_FOUND);
     }
-    return {
-      ok: true,
-      status: HTTP_SUCCESS.OK,
-      code: "FindUserById",
-      data: user,
-    };
+
+    return user;
   },
 
   async showByUsername(username) {
     const user = await UserRepository.showByUsername(username);
 
     if (!user) {
-      return {
-        ok: false,
-        status: HTTP_FAILED.NOT_FOUND,
-        code: "UserNotFound",
-        data: null,
-      };
+      throw new AppError("UserNotFound", HTTP_FAILED.NOT_FOUND);
     }
 
-    return {
-      ok: true,
-      status: HTTP_SUCCESS.OK,
-      code: "FindUserByUsername",
-      data: user,
-    };
+    return user;
   },
 
   async create({ name, username, password, password_confirmation }) {
     try {
       if (password !== password_confirmation) {
-        return {
-          ok: false,
-          status: HTTP_FAILED.BAD_REQUEST,
-          code: "PasswordNotMatch",
-          data: null,
-        };
+        throw new AppError("PasswordNotMatch", HTTP_FAILED.BAD_REQUEST);
       }
 
       const hashPassword = await Hash.make(password);
 
-      const createUser = await UserRepository.create({
+      return await UserRepository.create({
         name,
         username,
         password: hashPassword,
       });
-
-      return {
-        ok: true,
-        status: HTTP_SUCCESS.CREATED,
-        code: "CreateUserSuccess",
-        data: createUser,
-      };
     } catch (error) {
-      return HandlePrismaError(error, {
-        P2002: "UsernameAlreadyExist",
+      HandlePrismaError(error, {
+        P2002: {
+          code: "UsernameAlreadyExist",
+          status: HTTP_FAILED.BAD_REQUEST,
+        },
       });
     }
   },
   async update(id, { name, username }) {
     try {
-      const updateUser = await UserRepository.update(id, { name, username });
-
-      return {
-        ok: true,
-        status: HTTP_SUCCESS.OK,
-        code: "UpdateUserSuccess",
-        data: updateUser,
-      };
+      return await UserRepository.update(id, { name, username });
     } catch (error) {
-      return HandlePrismaError(error, {
-        P2002: "UsernameAlreadyExist",
-        P2025: "UserIdNotFound",
+      HandlePrismaError(error, {
+        P2002: {
+          code: "UsernameAlreadyExist",
+          status: HTTP_FAILED.BAD_REQUEST,
+        },
+        P2025: {
+          code: "UserIdNotFound",
+          status: HTTP_FAILED.NOT_FOUND,
+        },
       });
     }
   },
@@ -105,43 +70,36 @@ export const UserService = {
   async updatePassword(id, { password, password_confirmation }) {
     try {
       if (password !== password_confirmation) {
-        return {
-          ok: false,
-          status: HTTP_FAILED.BAD_REQUEST,
-          code: "PasswordNotMatch",
-          data: null,
-        };
+        throw new AppError("PasswordNotMatch", HTTP_FAILED.BAD_REQUEST);
       }
 
       const hashPassword = await Hash.make(password);
-      const updateUserPassword = await UserRepository.updatePassword(id, {
+
+      return await UserRepository.updatePassword(id, {
         password: hashPassword,
       });
-
-      return {
-        ok: true,
-        status: HTTP_SUCCESS.OK,
-        code: "UpdatePasswordSuccess",
-        data: updateUserPassword,
-      };
     } catch (error) {
-      return HandlePrismaError(error, {
-        P2025: "UserIdNotFound",
+      HandlePrismaError(error, {
+        P2025: {
+          code: "UserIdNotFound",
+          status: HTTP_FAILED.NOT_FOUND,
+        },
       });
     }
   },
   async destroy(id) {
     try {
-      await UserRepository.destroy(id);
-      return {
-        ok: true,
-        status: HTTP_SUCCESS.NO_CONTENT,
-        code: "DeleteUserSuccess",
-      };
+      return await UserRepository.destroy(id);
     } catch (error) {
-      return HandlePrismaError(error, {
-        P2003: "UserInUse",
-        P2025: "UserIdNotFound",
+      HandlePrismaError(error, {
+        P2003: {
+          code: "UserInUse",
+          status: HTTP_FAILED.BAD_REQUEST,
+        },
+        P2025: {
+          code: "UserIdNotFound",
+          status: HTTP_FAILED.NOT_FOUND,
+        },
       });
     }
   },

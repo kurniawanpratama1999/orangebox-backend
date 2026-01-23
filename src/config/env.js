@@ -2,12 +2,12 @@ import "dotenv/config";
 
 export const env = {
   database: {
-    name: process.env.DB_NAME ?? "",
-    host: process.env.DB_HOST ?? "",
-    user: process.env.DB_USER ?? "",
-    password: process.env.DB_PASS ?? "",
-    port: process.env.DB_PORT ?? "",
-    url: process.env.DB_URL ?? "",
+    name: process.env.DATABASE_NAME ?? "",
+    host: process.env.DATABASE_HOST ?? "",
+    user: process.env.DATABASE_USER ?? "",
+    password: process.env.DATABASE_PASSWORD ?? "",
+    port: process.env.DATABASE_PORT ?? "",
+    url: process.env.DATABASE_URL ?? "",
   },
 
   server: {

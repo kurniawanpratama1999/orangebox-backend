@@ -1,10 +1,5 @@
-import { TokenRepository } from "#api/repositories/token.repository.js";
 import { AuthService } from "#api/services/auth.service.js";
-import { AppError } from "#utils/AppError.js";
-import { Flash, HTTP_FAILED, HTTP_SUCCESS } from "#utils/Flash.js";
-import { Hash } from "#utils/Hash.js";
-import { jwt } from "#utils/Jwt.js";
-import { randomUUID } from "crypto";
+import { Flash, HTTP_SUCCESS } from "#utils/Flash.js";
 
 export const AuthController = {
   async login(req, res, next) {

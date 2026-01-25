@@ -15,6 +15,7 @@ model users {
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
   tokens     tokens?
 }
 
@@ -23,8 +24,7 @@ model tokens {
   user_id Int    @unique
   token   String @db.LongText
 
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
+  expired_at DateTime
 
   user    users  @relation(fields: [user_id], references: [id])
 }
@@ -42,7 +42,7 @@ model products {
   photo          String  @db.LongText
   name           String  @unique
   description    String  @db.LongText
-  price          Decimal
+  price          Decimal @db.Decimal(10,2)
 
   is_favorite    Boolean @default(false)
   is_new         Boolean @default(false)
@@ -53,59 +53,20 @@ model products {
   category   categories @relation(fields: [category_id], references: [id])
 }
 
-
-model umkm_name {
-  name        String @unique
-  address     String @db.LongText
-}
-
 model sosmeds {
   id   Int @id @default(autoincrement())
   name String @unique
   description String
   link String @db.LongText
 
-  more_cta more_cta?
-
-  button_location1 location[] @relation("link1")
-  button_location2 location[] @relation("link2")
+  content_cta      content? @relation("content_cta")
+  content_location content? @relation("content_location")
 }
 
-model hero {
-  headline String @unique
-  photo String @db.LongText
-  subheadline String
-  description String @db.LongText
-}
-
-model favorite_menu {
-  title String @unique
-  information String
-  max_show_product Int
-}
-
-model facility_and_place {
-  title String @unique
-  information String
-}
-
-model facilities_and_places {
+model facilities {
   id Int @id @default(autoincrement())
   photo String @db.LongText
   name String
-}
-
-model more_cta {
-  title String @unique
-  button String
-  link_id Int @unique
-
-  sosmed sosmeds @relation(fields: [link_id], references: [id])
-}
-
-model testimoni {
-  title String @unique
-  information String
 }
 
 model testimonies {
@@ -115,16 +76,37 @@ model testimonies {
   description String
 }
 
-model location {
-  title String @unique
-  photo String @db.LongText
+model content {
+  id Int @id @default(autoincrement())
 
-  button1 String
-  link1_id Int
+  umkm_name String
+  umkm_address String
 
-  button2 String
-  link2_id Int
+  hero_photo String
+  hero_headline String
+  hero_subheadline String
+  hero_description String
 
-  link1 sosmeds @relation("link1",fields: [link1_id], references: [id])
-  link2 sosmeds @relation("link2",fields: [link2_id], references: [id])
+  favorite_title String
+  favorite_information String
+  favorite_max_product Int
+
+  facility_title String
+  facility_information String
+
+  cta_title String
+  cta_button String
+  cta_link_id Int @unique
+
+  testimoni_title String
+  testimoni_information String
+
+  location_photo String
+  location_title String
+  location_maps String
+  location_button String
+  location_link_id Int @unique
+
+  sosmed_cta sosmeds @relation("content_cta", fields: [cta_link_id], references: [id])
+  sosmed_location sosmeds @relation("content_location",fields: [location_link_id],references: [id])
 }

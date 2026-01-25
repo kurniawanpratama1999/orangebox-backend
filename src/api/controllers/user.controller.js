@@ -19,16 +19,7 @@ export const UserController = {
 
   async show(req, res, next) {
     try {
-      const userId = req.params.id;
-      if (!userId) {
-        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
-      }
-
-      const id = Number(userId);
-
-      if (Number.isNaN(id)) {
-        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
-      }
+      const id = req.params.id;
 
       const user = await UserService.showById(id);
 

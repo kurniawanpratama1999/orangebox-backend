@@ -1,7 +1,7 @@
 import { prisma } from "#orm/lib/prisma.js";
 import { Hash } from "#utils/Hash.js";
 
-export const UserSeed = async () => {
+const UserSeed = async () => {
   const user = await prisma.users.create({
     data: {
       name: "admin toko",
@@ -16,3 +16,5 @@ export const UserSeed = async () => {
 
   console.log("All User:", allUser);
 };
+
+export default UserSeed;

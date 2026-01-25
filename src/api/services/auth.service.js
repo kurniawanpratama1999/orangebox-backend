@@ -1,5 +1,4 @@
-import { TokenRepository } from "#api/repositories/token.repository.js";
-import { UserRepository } from "#api/repositories/user.respository.js";
+import { prisma } from "#orm/lib/prisma.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
@@ -10,7 +9,11 @@ import { randomUUID } from "crypto";
 export const AuthService = {
   async login(username, password) {
     try {
-      const user = await UserRepository.showByUsername(username);
+      const user = await prisma.users.findUnique({
+        include: { tokens: true },
+        where: { username },
+      });
+
       if (!user) {
         throw new AppError("WrongUsernameOrPassword", HTTP_FAILED.BAD_REQUEST);
       }
@@ -25,14 +28,16 @@ export const AuthService = {
       const jti = randomUUID();
 
       if (user.tokens) {
-        await TokenRepository.destroy(user.tokens?.id);
+        await prisma.tokens.delete({ where: { id: jti } });
       }
 
       const refreshToken = jwt.createRefreshToken(userId, jti);
       const accessToken = jwt.createAccessToken(userId);
 
       const hashRefreshToken = await Hash.make(refreshToken);
-      await TokenRepository.create(jti, hashRefreshToken, userId);
+      await prisma.tokens.create({
+        data: { id: jti, token: hashRefreshToken, user_id: userId },
+      });
 
       return {
         refreshToken,
@@ -67,7 +72,10 @@ export const AuthService = {
       const sub = verifyRefreshToken?.sub;
       const jti = verifyRefreshToken?.jti;
 
-      const findRefreshToken = await TokenRepository.findById(jti);
+      const findRefreshToken = await prisma.tokens.findUnique({
+        where: { id: jti },
+      });
+
       if (!findRefreshToken) {
         throw new AppError("CredentialNotFound", HTTP_FAILED.UNAUTHORIZED);
       }
@@ -87,7 +95,10 @@ export const AuthService = {
 
       const hashRefreshToken = await Hash.make(newRefreshToken);
 
-      await TokenRepository.update(jti, newJti, hashRefreshToken);
+      await prisma.tokens.update({
+        data: { id: newJti, token: hashToken },
+        where: { id: oldJti },
+      });
 
       const accessToken = jwt.createAccessToken(sub);
 

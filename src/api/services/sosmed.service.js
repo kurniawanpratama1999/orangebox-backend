@@ -40,7 +40,7 @@ export const SosmedService = {
         },
       });
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2002: {
           code: "SosmedAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -76,7 +76,7 @@ export const SosmedService = {
 
       return updateSosmedById;
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2002: {
           code: "SosmedAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -103,7 +103,7 @@ export const SosmedService = {
 
       return await prisma.sosmeds.delete({ where: { id: sosmed_id } });
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2025: {
           code: "SosmedIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,

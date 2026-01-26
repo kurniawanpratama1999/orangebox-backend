@@ -39,7 +39,7 @@ export const FacilityService = {
         },
       });
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2002: {
           code: "FacilityAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -74,7 +74,7 @@ export const FacilityService = {
 
       return facilityById;
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2002: {
           code: "FacilityAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -101,7 +101,7 @@ export const FacilityService = {
 
       return await prisma.facilities.delete({ where: { id: facility_id } });
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2025: {
           code: "FacilityIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,

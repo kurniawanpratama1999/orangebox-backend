@@ -39,7 +39,7 @@ export const CategoryService = {
         },
       });
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2002: {
           code: "CategoryAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -74,7 +74,7 @@ export const CategoryService = {
 
       return updateCategoryById;
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2002: {
           code: "CategoryAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
@@ -101,7 +101,7 @@ export const CategoryService = {
 
       return await prisma.categories.delete({ where: { id: category_id } });
     } catch (error) {
-      throw HandlePrismaError({
+      throw HandlePrismaError(error, {
         P2025: {
           code: "CategoryIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,

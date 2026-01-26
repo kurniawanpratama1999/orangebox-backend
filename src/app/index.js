@@ -5,6 +5,7 @@ import { AuthRoutes } from "#routes/auth.routes.js";
 import { AuthMiddleware } from "#api/middlewares/AuthMiddleware.js";
 import { appMiddleware as appRoutes } from "./middleware.js";
 import { CategoryRoutes } from "#routes/category.routes.js";
+import { SosmedRoutes } from "#routes/sosmed.routes.js";
 
 appRoutes.get("/", (req, res) => {
   res.send("Hello World");
@@ -15,6 +16,8 @@ appRoutes.use("/auth", AuthRoutes);
 appRoutes.use("/user", AuthMiddleware, UserRoutes);
 
 appRoutes.use("/category", CategoryRoutes);
+
+appRoutes.use("/sosmed", SosmedRoutes);
 
 appRoutes.use((err, req, res, next) => {
   const status = 500;

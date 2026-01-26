@@ -80,7 +80,7 @@ export const CategoryService = {
           status: HTTP_FAILED.BAD_REQUEST,
         },
         P2025: {
-          code: "UserIdNotFound",
+          code: "CategoryIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
         },
       });
@@ -103,7 +103,7 @@ export const CategoryService = {
     } catch (error) {
       throw HandlePrismaError({
         P2025: {
-          code: "UserIdNotFound",
+          code: "CategoryIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
         },
         P2003: {

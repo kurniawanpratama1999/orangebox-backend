@@ -32,7 +32,7 @@ model tokens {
 model categories {
   id          Int        @id @default(autoincrement())
   name        String     @unique
-  description String     @db.LongText
+  description String     @db.LongText @default("")
   products    products[]
 }
 
@@ -41,7 +41,7 @@ model products {
   category_id    Int
   photo          String  @db.LongText
   name           String  @unique
-  description    String  @db.LongText
+  description    String  @db.LongText @default("")
   price          Decimal @db.Decimal(10,2)
 
   is_favorite    Boolean @default(false)

@@ -1,3 +1,4 @@
+import path from "path";
 import { UserRoutes } from "#routes/user.routes.js";
 import { AppError } from "#utils/AppError.js";
 import { Flash } from "#utils/Flash.js";
@@ -6,9 +7,11 @@ import { AuthMiddleware } from "#api/middlewares/AuthMiddleware.js";
 import { appMiddleware as appRoutes } from "./middleware.js";
 import { CategoryRoutes } from "#routes/category.routes.js";
 import { SosmedRoutes } from "#routes/sosmed.routes.js";
+import { FacilityRoutes } from "#routes/facility.routes.js";
+import { TestimonyRoutes } from "#routes/testimony.routes.js";
 
 appRoutes.get("/", (req, res) => {
-  res.send("Hello World");
+  res.sendFile(path.resolve("README.md"));
 });
 
 appRoutes.use("/auth", AuthRoutes);
@@ -19,7 +22,9 @@ appRoutes.use("/category", CategoryRoutes);
 
 appRoutes.use("/sosmed", SosmedRoutes);
 
-appRoutes.use("/facility", SosmedRoutes);
+appRoutes.use("/facility", FacilityRoutes);
+
+appRoutes.use("/testimony", TestimonyRoutes);
 
 appRoutes.use((err, req, res, next) => {
   const status = 500;

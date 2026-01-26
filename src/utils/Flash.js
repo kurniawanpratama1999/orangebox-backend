@@ -18,7 +18,7 @@ export const HTTP_SUCCESS = {
 };
 
 export const Flash = {
-  success(res, { status, code, data }) {
+  success(res, { status, code, data = null }) {
     return res.status(status).send({
       success: true,
       code,

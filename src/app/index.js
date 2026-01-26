@@ -19,6 +19,8 @@ appRoutes.use("/category", CategoryRoutes);
 
 appRoutes.use("/sosmed", SosmedRoutes);
 
+appRoutes.use("/facility", SosmedRoutes);
+
 appRoutes.use((err, req, res, next) => {
   const status = 500;
   const code = "InternalServerError";

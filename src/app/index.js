@@ -9,6 +9,7 @@ import { CategoryRoutes } from "#routes/category.routes.js";
 import { SosmedRoutes } from "#routes/sosmed.routes.js";
 import { FacilityRoutes } from "#routes/facility.routes.js";
 import { TestimonyRoutes } from "#routes/testimony.routes.js";
+import { ContentRoutes } from "#routes/content.routes.js";
 
 appRoutes.get("/", (req, res) => {
   res.sendFile(path.resolve("README.md"));
@@ -25,6 +26,8 @@ appRoutes.use("/sosmed", SosmedRoutes);
 appRoutes.use("/facility", FacilityRoutes);
 
 appRoutes.use("/testimony", TestimonyRoutes);
+
+appRoutes.use("/content", ContentRoutes);
 
 appRoutes.use((err, req, res, next) => {
   const status = 500;

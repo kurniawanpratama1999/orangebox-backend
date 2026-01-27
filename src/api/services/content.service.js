@@ -1,11 +1,21 @@
 import { prisma } from "#orm/lib/prisma.js";
+import { useCache } from "#store/cache.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
 
+const key = "content:all";
 export const ContentService = {
   async index() {
-    return await prisma.content.findFirst();
+    if (useCache.has(key)) {
+      console.log("from cache");
+      return useCache.get(key);
+    }
+
+    const content = await prisma.content.findFirst();
+    useCache.set(key, content);
+
+    return content;
   },
 
   async update(data) {
@@ -14,16 +24,17 @@ export const ContentService = {
 
       const firstId = findFirst.id;
 
-      const contentById = await prisma.content.update({
+      const updated = await prisma.content.update({
         data,
         where: { id: firstId },
       });
 
-      if (!contentById) {
+      if (!updated) {
         throw new AppError("ContentNotFound", HTTP_FAILED.BAD_REQUEST);
       }
 
-      return contentById;
+      useCache.set(key, updated);
+      return updated;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {

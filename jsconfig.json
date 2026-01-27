@@ -7,6 +7,6 @@
       "#*": ["./src/*.js"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/cached/.js"],
   "exclude": ["node_modules"]
 }

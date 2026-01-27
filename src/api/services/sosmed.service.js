@@ -1,11 +1,21 @@
 import { prisma } from "#orm/lib/prisma.js";
+import { useCache } from "#store/cache.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
 
+const key = "sosmed:all";
 export const SosmedService = {
   async index() {
-    return await prisma.sosmeds.findMany();
+    if (useCache.has(key)) {
+      console.log("from cache");
+      return useCache.get(key);
+    }
+
+    const sosmeds = await prisma.sosmeds.findMany();
+    useCache.set(key, sosmeds);
+
+    return sosmeds;
   },
 
   async show(id) {
@@ -17,6 +27,16 @@ export const SosmedService = {
 
     if (Number.isNaN(sosmed_id)) {
       throw new AppError("InvalidSosmedId", HTTP_FAILED.BAD_REQUEST);
+    }
+
+    const sosmeds = useCache.get(key) ?? [];
+    if (sosmeds) {
+      const sosmedById = sosmeds.find((s) => s.id === sosmed_id);
+
+      if (sosmedById) {
+        console.log("from cache");
+        return sosmedById;
+      }
     }
 
     const sosmedById = await prisma.sosmeds.findUnique({
@@ -32,13 +52,18 @@ export const SosmedService = {
 
   async create({ name, description, link }) {
     try {
-      return prisma.sosmeds.create({
+      const newData = await prisma.sosmeds.create({
         data: {
           name,
           description,
           link,
         },
       });
+
+      const sosmeds = useCache.get(key) ?? [];
+      useCache.set(key, [...sosmeds, newData]);
+
+      return newData;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
@@ -61,7 +86,7 @@ export const SosmedService = {
         throw new AppError("InvalidSosmedId", HTTP_FAILED.BAD_REQUEST);
       }
 
-      const updateSosmedById = await prisma.sosmeds.update({
+      const updated = await prisma.sosmeds.update({
         data: {
           name,
           description,
@@ -70,11 +95,18 @@ export const SosmedService = {
         where: { id: sosmed_id },
       });
 
-      if (!updateSosmedById) {
+      if (!updated) {
         throw new AppError("SosmedNotFound", HTTP_FAILED.BAD_REQUEST);
       }
 
-      return updateSosmedById;
+      const sosmeds = useCache.get(key);
+
+      useCache.set(
+        key,
+        sosmeds.map((s) => (s.id === sosmed_id ? updated : s)),
+      );
+
+      return updated;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
@@ -101,7 +133,16 @@ export const SosmedService = {
         throw new AppError("InvalidSosmedId", HTTP_FAILED.BAD_REQUEST);
       }
 
-      return await prisma.sosmeds.delete({ where: { id: sosmed_id } });
+      const deleted = await prisma.sosmeds.delete({ where: { id: sosmed_id } });
+
+      const sosmeds = useCache.get(key);
+
+      useCache.set(
+        key,
+        sosmeds.filter((s) => s.id !== sosmed_id),
+      );
+
+      return deleted;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2025: {

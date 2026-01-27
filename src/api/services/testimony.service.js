@@ -1,11 +1,21 @@
 import { prisma } from "#orm/lib/prisma.js";
+import { useCache } from "#store/cache.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
 
+const key = "testimony:all";
 export const TestimonyService = {
   async index() {
-    return await prisma.facilities.findMany();
+    if (useCache.has(key)) {
+      console.log("from cache");
+      return useCache.get(key);
+    }
+
+    const testimonies = await prisma.facilities.findMany();
+    useCache.set(key, testimonies);
+
+    return testimonies;
   },
 
   async show(id) {
@@ -17,6 +27,16 @@ export const TestimonyService = {
 
     if (Number.isNaN(testimony_id)) {
       throw new AppError("InvalidTestimonyId", HTTP_FAILED.BAD_REQUEST);
+    }
+
+    const testimonies = useCache.get(key) ?? [];
+    if (testimonies) {
+      const testimonyById = testimonies.find((t) => t.id === testimony_id);
+
+      if (testimonyById) {
+        console.log("from cache");
+        return testimonyById;
+      }
     }
 
     const testimonyById = await prisma.facilities.findUnique({
@@ -32,13 +52,17 @@ export const TestimonyService = {
 
   async create({ name, photo, description }) {
     try {
-      return prisma.facilities.create({
+      const newData = await prisma.facilities.create({
         data: {
           name,
           photo,
           description,
         },
       });
+
+      const testimonies = useCache.get(key) ?? [];
+      useCache.set(key, [...testimonies, newData]);
+      return newData;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
@@ -61,7 +85,7 @@ export const TestimonyService = {
         throw new AppError("InvalidTestimonyId", HTTP_FAILED.BAD_REQUEST);
       }
 
-      const testimonyById = await prisma.facilities.update({
+      const updated = await prisma.facilities.update({
         data: {
           name,
           photo,
@@ -70,11 +94,18 @@ export const TestimonyService = {
         where: { id: testimony_id },
       });
 
-      if (!testimonyById) {
+      if (!updated) {
         throw new AppError("TestimonyNotFound", HTTP_FAILED.BAD_REQUEST);
       }
 
-      return testimonyById;
+      const testimonies = useCache.get(key);
+
+      useCache.set(
+        key,
+        testimonies.map((t) => (t.id === testimony_id ? updated : t)),
+      );
+
+      return updated;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
@@ -101,7 +132,18 @@ export const TestimonyService = {
         throw new AppError("InvalidTestimonyId", HTTP_FAILED.BAD_REQUEST);
       }
 
-      return await prisma.facilities.delete({ where: { id: testimony_id } });
+      const deleted = await prisma.facilities.delete({
+        where: { id: testimony_id },
+      });
+
+      const testimonies = useCache.get(key);
+
+      useCache.set(
+        key,
+        testimonies.filter((t) => t.id !== testimonies),
+      );
+
+      return deleted;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2025: {

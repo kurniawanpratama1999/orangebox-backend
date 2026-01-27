@@ -19,7 +19,7 @@ export const AuthController = {
       });
 
       return Flash.success(res, {
-        status: HTTP_SUCCESS.ACCEPTED,
+        status: HTTP_SUCCESS.CREATED,
         code: "LoginSuccess",
         data: loginService.accessToken,
       });

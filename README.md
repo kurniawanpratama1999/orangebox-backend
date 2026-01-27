@@ -48,18 +48,28 @@ Sehingga layer **Repository & Model tidak diperlukan**.
 ## Struktur Folder
 
 ```
-src/
+DIR/
 │
-├── app/
-│   └── index.js            # App setup & global error handler
+├── node_modules/
+├── prisma/
+├── src/
+│    ├── api/
+│    │    ├── controllers/      # kirim response success
+│    │    ├── middlewares/      # custom middlewares
+│    │    ├── services/         # bisnis logic
+│    │    └── validation/       # zod schema
+│    │
+│    ├── app/
+│    │    ├── index.js          # app setup & global error handler
+│    │    └── middleware.js     # app middlware seperti cors
+│    │
+│    ├── config/                # pengaturan env dalam bentuk object
+│    ├── orm/                   # genereted prisma
+│    ├── routes/                # routing API
+│    ├── seeder/                # bantuan untuk isi database di awal aplikasi
+│    └── utils/                 # kumpulan alat untuk konsistensi kode
 │
-├── routes/                 # Routing API
-├── controllers/            # Controller layer (response only)
-├── services/               # Business logic
-├── validation/             # Zod schema
-├── middleware/             # Custom middleware
-├── utils/                  # Helper (Flash, AppError, Prisma Error)
-└── orm/                    # Prisma client
+└── .env                        # awas jangan di up ke github
 ```
 
 ---
@@ -298,7 +308,326 @@ export const Service = {
 };
 ```
 
+_Last updated: 26 Januari 2026_
+
 ---
+
+## Kumpulan Public API
+
+diperlukan oleh frontend untuk customer tanpa perlu access token dan refresh token
+
+### Base URL
+
+tanpa versioning, dipakai untuk semua
+
+```
+http://localhost:3001/api
+```
+
+---
+
+## Autentikasi
+
+untuk menandai user yang sudah login, dan membuat access token dalam mengakses url
+
+### 1. Login
+
+- Endpoint
+
+  ```
+  POST: /auth/login
+  ```
+
+- Fetch Api
+
+  ```json
+  {
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json",
+      "credentials": "include"
+    },
+    "body": {
+      "username": "_string_",
+      "password": "_string_"
+    }
+  }
+  ```
+
+- Response
+
+  ```json
+  // 201: CREATED
+
+  {
+    "success": true,
+    "code": "LoginSuccess",
+    "data": "<AccessToken>"
+  }
+
+
+  // 400: BAD REQUEST
+
+  {
+    "success": false,
+    "code": "WrongUsernameOrPassword",
+    "data": null
+  }
+  ```
+
+### 2. Refresh Token
+
+- Endpoint
+
+  ```
+  POST: /auth/refresh
+  ```
+
+- Fetch Api
+
+  ```json
+  {
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+  ```
+
+- Response
+
+  ```json
+  // 201: CREATED
+
+  {
+    "success": true,
+    "code": "NewAccessCreated",
+    "data": "<NEW_TOKEN>"
+  }
+
+
+  // 401: UNAUTHORIZED | Butuh RefreshToken
+
+  {
+    "success": false,
+    "code": "CredentialNotFound",
+    "data": null
+  }
+  ```
+
+---
+
+## Indexing Data untuk Frontend
+
+- Fetch API
+
+  ```json
+  {
+    "method": "GET",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+  ```
+
+### # Sosial Media
+
+- Endpoint
+
+  ```
+  GET: /sosmed
+  ```
+
+- Response
+
+  ```json
+  // 202: ACCEPTED
+
+  {
+    "success": true,
+    "code": "GetSosmedsIsSuccess",
+    "data": [
+      {
+        "id": "integer",
+        "name": "string",
+        "description": "string",
+        "link": "string"
+      }
+      // _next records_ //
+    ]
+  }
+  ```
+
+### # Fasilitas dan Tempat
+
+- Endpoint
+
+  ```
+  GET: /facility
+  ```
+
+- Response
+
+  ```json
+  // 202: ACCEPTED
+
+  {
+    "success": true,
+    "code": "GetFacilitiesIsSuccess",
+    "data": [
+      {
+        "id": "integer",
+        "name": "string",
+        "photo": "string"
+      }
+      // _next records_ //
+    ]
+  }
+  ```
+
+### # Kategori Produk
+
+- Endpoint
+
+  ```
+  GET: /category
+  ```
+
+- Response
+
+  ```json
+  // 202: ACCEPTED
+
+  {
+    "success": true,
+    "code": "GetCategoriesIsSuccess",
+    "data": [
+      {
+        "id": "integer",
+        "name": "string",
+        "description": "string"
+      }
+      // _next records_ //
+    ]
+  }
+  ```
+
+### # Kumpulan Produk
+
+- Endpoint
+
+  ```
+  GET: /product
+  ```
+
+- Response
+
+  ```json
+  // 202: ACCEPTED
+
+  {
+    "success": true,
+    "code": "GetProductsIsSuccess",
+    "data": [
+      {
+        "id": "integer",
+        "category_id": "integer",
+        "category_name": "string",
+        "photo": "string",
+        "name": "string",
+        "description": "string",
+        "price": "decimal",
+        "is_favorite": "boolean",
+        "is_new": "boolean",
+        "created_at": "date",
+        "updated_at": "date"
+      }
+      // _next records_ //
+    ]
+  }
+  ```
+
+### # Testimoni
+
+- Endpoint
+
+  ```
+  GET: /testimony
+  ```
+
+- Response
+
+  ```json
+  // 202: ACCEPTED
+
+  {
+    "success": true,
+    "code": "GetFacilitiesIsSuccess",
+    "data": [
+      {
+        "id": "integer",
+        "name": "string",
+        "photo": "string",
+        "description": "string"
+      }
+      // _next records_ //
+    ]
+  }
+  ```
+
+### # Content
+
+- Endpoint
+
+  ```
+  GET: /content
+  ```
+
+- Response
+
+  ```json
+  // 202: ACCEPTED
+
+  {
+    "success": true,
+    "code": "GetContentIsSuccess",
+    "data": [
+      {
+        "id": "integer",
+        "umkm_name": "String",
+        "umkm_address": "String",
+
+        "hero_photo": "String",
+        "hero_headline": "String",
+        "hero_subheadline": "String",
+        "hero_description": "String",
+
+        "favorite_title": "String",
+        "favorite_information": "String",
+        "favorite_max_product": "Int",
+
+        "facility_title": "String",
+        "facility_information": "String",
+
+        "cta_title": "String",
+        "cta_button": "String",
+        "cta_link_id": "Int",
+
+        "testimoni_title": "String",
+        "testimoni_information": "String",
+
+        "location_photo": "String",
+        "location_title": "String",
+        "location_maps": "String",
+        "location_button": "String",
+        "location_link_id": "Int"
+      }
+      // _next records_ //
+    ]
+  }
+  ```
+
+_Last updated: 27 Januari 2026_
 
 ## Notes
 
@@ -308,5 +637,3 @@ export const Service = {
 - Error **wajib menggunakan AppError**
 
 ---
-
-_Last updated: 26 Januari 2026_

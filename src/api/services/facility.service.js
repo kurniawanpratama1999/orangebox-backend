@@ -1,11 +1,21 @@
 import { prisma } from "#orm/lib/prisma.js";
+import { useCache } from "#store/cache.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
 
+const key = "facility:all";
 export const FacilityService = {
   async index() {
-    return await prisma.facilities.findMany();
+    if (useCache.has(key)) {
+      console.log("from cache");
+      return useCache.get(key);
+    }
+
+    const facilities = await prisma.facilities.findMany();
+    useCache.set(key, facilities);
+
+    return facilities;
   },
 
   async show(id) {
@@ -17,6 +27,17 @@ export const FacilityService = {
 
     if (Number.isNaN(facility_id)) {
       throw new AppError("InvalidFacilityId", HTTP_FAILED.BAD_REQUEST);
+    }
+
+    const facilities = useCache.get(key) ?? [];
+
+    if (facilities) {
+      const facility = facilities.find((f) => f.id === facility_id);
+
+      if (facility) {
+        console.log("from cache");
+        return facility;
+      }
     }
 
     const facilityById = await prisma.facilities.findUnique({
@@ -32,12 +53,17 @@ export const FacilityService = {
 
   async create({ name, photo }) {
     try {
-      return prisma.facilities.create({
+      const newData = await prisma.facilities.create({
         data: {
           name,
           photo,
         },
       });
+
+      const facilities = useCache.get(key) ?? [];
+      useCache.set(key, [...facilities, newData]);
+
+      return newData;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
@@ -60,7 +86,7 @@ export const FacilityService = {
         throw new AppError("InvalidFacilityId", HTTP_FAILED.BAD_REQUEST);
       }
 
-      const facilityById = await prisma.facilities.update({
+      const updated = await prisma.facilities.update({
         data: {
           name,
           photo,
@@ -68,11 +94,20 @@ export const FacilityService = {
         where: { id: facility_id },
       });
 
-      if (!facilityById) {
+      if (!updated) {
         throw new AppError("FacilityNotFound", HTTP_FAILED.BAD_REQUEST);
       }
 
-      return facilityById;
+      const facilities = useCache.get(key) ?? [];
+
+      useCache.set(
+        key,
+        facilities.map((facility) =>
+          facility.id === updated.id ? updated : facility,
+        ),
+      );
+
+      return updated;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
@@ -99,7 +134,17 @@ export const FacilityService = {
         throw new AppError("InvalidFacilityId", HTTP_FAILED.BAD_REQUEST);
       }
 
-      return await prisma.facilities.delete({ where: { id: facility_id } });
+      const deleted = await prisma.facilities.delete({
+        where: { id: facility_id },
+      });
+
+      const facilities = useCache.get(key) ?? [];
+      useCache.set(
+        key,
+        facilities.filter((facility) => facility.id !== facility_id),
+      );
+
+      return deleted;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2025: {

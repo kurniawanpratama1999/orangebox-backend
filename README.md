@@ -356,22 +356,11 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
 - Response
 
-  ```json
-  // 201: CREATED
-
+  ```js
   {
-    "success": true,
-    "code": "LoginSuccess",
-    "data": "<AccessToken>"
-  }
-
-
-  // 400: BAD REQUEST
-
-  {
-    "success": false,
-    "code": "WrongUsernameOrPassword",
-    "data": null
+    success: true,
+    code: "LoginSuccess",
+    data: "<AccessToken>"
   }
   ```
 
@@ -396,22 +385,11 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
 - Response
 
-  ```json
-  // 201: CREATED
-
+  ```js
   {
-    "success": true,
-    "code": "NewAccessCreated",
-    "data": "<NEW_TOKEN>"
-  }
-
-
-  // 401: UNAUTHORIZED | Butuh RefreshToken
-
-  {
-    "success": false,
-    "code": "CredentialNotFound",
-    "data": null
+    success: true,
+    code: "NewAccessCreated",
+    data: "<NEW_TOKEN>"
   }
   ```
 
@@ -436,24 +414,23 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
   ```
   GET: /sosmed
+
+  GET: /sosmed/:id
   ```
 
 - Response
 
-  ```json
-  // 202: ACCEPTED
-
+  ```js
   {
-    "success": true,
-    "code": "GetSosmedsIsSuccess",
-    "data": [
+    success: true,
+    code: "GetSosmedsIsSuccess",
+    data: [
       {
-        "id": "integer",
-        "name": "string",
-        "description": "string",
-        "link": "string"
+        id: "integer",
+        name: "string",
+        description: "string",
+        link: "string"
       }
-      // _next records_ //
     ]
   }
   ```
@@ -464,24 +441,23 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
   ```
   GET: /facility
+
+  GET: /facility/:id
   ```
 
 - Response
 
-  ```json
-  // 202: ACCEPTED
-
+  ```js
   {
-    "success": true,
-    "code": "GetFacilitiesIsSuccess",
-    "data": [
-      {
-        "id": "integer",
-        "name": "string",
-        "photo": "string"
-      }
-      // _next records_ //
-    ]
+  success: true,
+  code: "GetFacilitiesIsSuccess",
+  data: [
+    {
+      id: "integer",
+      name: "string",
+      photo: "string"
+    }
+  ]
   }
   ```
 
@@ -491,23 +467,23 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
   ```
   GET: /category
+
+  GET: /category/:id
+
   ```
 
 - Response
 
-  ```json
-  // 202: ACCEPTED
-
+  ```js
   {
-    "success": true,
-    "code": "GetCategoriesIsSuccess",
-    "data": [
+    success: true,
+    code: "GetCategoriesIsSuccess",
+    data: [
       {
-        "id": "integer",
-        "name": "string",
-        "description": "string"
+        id: "integer",
+        name: "string",
+        description: "string"
       }
-      // _next records_ //
     ]
   }
   ```
@@ -518,31 +494,30 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
   ```
   GET: /product
+
+  GET: /product/:id
   ```
 
 - Response
 
-  ```json
-  // 202: ACCEPTED
-
+  ```js
   {
-    "success": true,
-    "code": "GetProductsIsSuccess",
-    "data": [
+    success: true,
+    code: "GetProductsIsSuccess",
+    data: [
       {
-        "id": "integer",
-        "category_id": "integer",
-        "category_name": "string",
-        "photo": "string",
-        "name": "string",
-        "description": "string",
-        "price": "decimal",
-        "is_favorite": "boolean",
-        "is_new": "boolean",
-        "created_at": "date",
-        "updated_at": "date"
-      }
-      // _next records_ //
+        id: "integer",
+        category_id: "integer",
+        category_name: "string",
+        photo: "string",
+        name: "string",
+        description: "string",
+        price: "decimal",
+        is_favorite: "boolean",
+        is_new: "boolean",
+        created_at: "date",
+        updated_at: "date"
+      },
     ]
   }
   ```
@@ -553,24 +528,23 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
   ```
   GET: /testimony
+
+  GET: /testimony/:id
   ```
 
 - Response
 
-  ```json
-  // 202: ACCEPTED
-
+  ```js
   {
-    "success": true,
-    "code": "GetFacilitiesIsSuccess",
-    "data": [
+    success: true,
+    code: "GetFacilitiesIsSuccess",
+    data: [
       {
-        "id": "integer",
-        "name": "string",
-        "photo": "string",
-        "description": "string"
-      }
-      // _next records_ //
+        id: "integer",
+        name: "string",
+        photo: "string",
+        description: "string"
+      },
     ]
   }
   ```
@@ -585,49 +559,281 @@ untuk menandai user yang sudah login, dan membuat access token dalam mengakses u
 
 - Response
 
-  ```json
-  // 202: ACCEPTED
-
+  ```js
   {
-    "success": true,
-    "code": "GetContentIsSuccess",
-    "data": [
-      {
-        "id": "integer",
-        "umkm_name": "String",
-        "umkm_address": "String",
+    success: true,
+    code: "GetContentIsSuccess",
+    data: {
+      id: "integer",
+      umkm_name: "String",
+      umkm_address: "String",
 
-        "hero_photo": "String",
-        "hero_headline": "String",
-        "hero_subheadline": "String",
-        "hero_description": "String",
+      hero_photo: "String",
+      hero_headline: "String",
+      hero_subheadline: "String",
+      hero_description: "String",
 
-        "favorite_title": "String",
-        "favorite_information": "String",
-        "favorite_max_product": "Int",
+      favorite_title: "String",
+      favorite_information: "String",
+      favorite_max_product: "Int",
 
-        "facility_title": "String",
-        "facility_information": "String",
+      facility_title: "String",
+      facility_information: "String",
 
-        "cta_title": "String",
-        "cta_button": "String",
-        "cta_link_id": "Int",
+      cta_title: "String",
+      cta_button: "String",
+      cta_link_id: "Int",
 
-        "testimoni_title": "String",
-        "testimoni_information": "String",
+      testimoni_title: "String",
+      testimoni_information: "String",
 
-        "location_photo": "String",
-        "location_title": "String",
-        "location_maps": "String",
-        "location_button": "String",
-        "location_link_id": "Int"
-      }
-      // _next records_ //
-    ]
+      location_photo: "String",
+      location_title: "String",
+      location_maps: "String",
+      location_button: "String",
+      location_link_id: "Int"
+    }
   }
   ```
 
-_Last updated: 27 Januari 2026_
+---
+
+## Kumpulan Protected API
+
+diperlukan oleh admin untuk melakukan perubahan pada data master, memerlukan Autentikasi, JWT Token, dan Refresh Token
+
+---
+
+### Base URL
+
+tanpa versioning, dipakai untuk semua
+
+```
+http://localhost:3001/api
+```
+
+---
+
+### Fetch Api
+
+```js
+const api = "http://localhost:3001/api";
+
+const response = await fetch(api + "/endpoint", {
+  Authorization: "Bearer <ACCESS_TOKEN>",
+  headers: {
+    "Content-Type": "application/json",
+    "X-Url": window.location.pathname,
+  },
+  Credentials: "include",
+  body: JSON.stringify({ __Lihat_Penjelasan_Dibawah__ }),
+});
+
+const resJson = await response.json();
+
+console.log(resJson);
+```
+
+### #AUTENTIKASI
+
+#### Endpoint
+
+```
+DELETE: /logout
+```
+
+#### Body
+
+```
+Kosong
+```
+
+#### Response
+
+```js
+{
+  success: true,
+  code: "LogoutIsSuccess",
+  data: null
+}
+```
+
+---
+
+### #USER
+
+---
+
+Method:`POST` for Creating -- EndPoint: `/user`
+
+Method:`PUT` for Updating -- EndPoint: `/user/:id`
+
+```js
+body: {
+  name: "String",
+  username: "String",
+}
+```
+
+---
+
+Method:`DELETE` for Deleting -- EndPoint: `/user/:id`
+
+```js
+// body: {} or Empty
+```
+
+### # KATEGORI
+
+---
+
+Method:`POST` for Creating -- EndPoint: `/category`
+
+Method:`PUT` for Updating -- EndPoint: `/category/:id`
+
+```js
+body: {
+  name: "String",
+  description: "String",
+}
+```
+
+---
+
+Method:`DELETE` for Deleting -- EndPoint: `/category/:id`
+
+```js
+// body: {} or Empty
+```
+
+### # PRODUK
+
+---
+
+Method:`POST` for Creating -- EndPoint: `/product`
+
+Method:`PUT` for Updating -- EndPoint: `/product/:id`
+
+```js
+body: {
+  category_id: "Int",
+  photo: "String",
+  name: "String",
+  description: "String",
+  price: "Decimal",
+  is_favorite: "Boolean",
+  is_new: "Boolean",
+}
+```
+
+---
+
+Method:`DELETE` for Deleting -- EndPoint: `/product/:id`
+
+```js
+// body: {} or Empty
+```
+
+### # SOSIAL MEDIA
+
+---
+
+Method:`POST` for Creating -- EndPoint: `/sosmed`
+
+Method:`PUT` for Updating -- EndPoint: `/sosmed/:id`
+
+```js
+body: {
+  name: "String",
+  description: "String",
+  link: "String",
+}
+```
+
+---
+
+Method:`DELETE` for Deleting -- EndPoint: `/sosmed/:id`
+
+```js
+// body: {} or Empty
+```
+
+### # TESTIMONI
+
+---
+
+Method:`POST` for Creating -- EndPoint: `/testomony`
+
+Method:`PUT` for Updating -- EndPoint: `/testomony/:id`
+
+```js
+body: {
+  name: "String",
+  photo: "String",
+  link: "String",
+}
+```
+
+---
+
+Method:`DELETE` for Deleting -- EndPoint: `/testomony/:id`
+
+```js
+// body: {} or Empty
+```
+
+### # FASILITAS DAN TEMPAT
+
+---
+
+Method:`POST` for Creating -- EndPoint: `/facility`
+
+Method:`PUT` for Updating -- EndPoint: `/facility/:id`
+
+```js
+body: {
+  name: "String",
+  photo: "String",
+}
+```
+
+---
+
+Method:`DELETE` for Deleting -- EndPoint: `/facility/:id`
+
+```js
+// body: {} or Empty
+```
+
+## Response Success
+
+`201` : Buat Data baru
+
+`202` : Ambil Data
+
+`200` : Update data
+
+`204` : Delete data
+
+## Response Failed
+
+| code                         | status | keterangan                                                         |
+| ---------------------------- | ------ | ------------------------------------------------------------------ |
+| `WrongUsernameOrPassword`    | `400`  | Pada saat login Username atau Password salah                       |
+| `...IdNotFound`              | `400`  | Params id saat Update Delete tidak dimasukan                       |
+| `InvalidParamsId`            | `400`  | Params id bukan angka                                              |
+| `PasswordNotMatch`           | `400`  | Password dan Password Confirmation tidak cocok saat pembuatan akun |
+| `...AlreadyExist`            | `400`  | Data bersifat unik, memasukan data yang sudah ada                  |
+| `...InUse`                   | `400`  | Tidak bisa dihapus karna sedang digunakan di data lainnya          |
+| `InvalidInput`               | `400`  | Dari Zod Object, datanya tidak sesuai dengan validasi              |
+| `CredentialNotFound`         | `401`  | Access Token atau Refresh Token tidak ada                          |
+| `CredentialNotMatch`         | `401`  | Refresh token tidak sesuai                                         |
+| `AccessNotFound`             | `401`  | Access Token tidak dimasukan ke dalam Authorization                |
+| `InvalidAuthorizationFormat` | `401`  | Access Token harus ada kata Bearer                                 |
+| `InvalidUserId`              | `401`  | Data user tidak sesuai                                             |
+| `...NotFound`                | `404`  | Data yang dicari tidak ada                                         |
+| `InternalServerError`        | `422`  | Handle dari prisma, proses gagal dieksekusi ke dalam database      |
+| `InternalServerError`        | `500`  | Error Global, cek pake console log                                 |
 
 ## Notes
 

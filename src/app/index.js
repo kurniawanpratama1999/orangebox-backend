@@ -11,29 +11,27 @@ import { FacilityRoutes } from "#routes/facility.routes.js";
 import { TestimonyRoutes } from "#routes/testimony.routes.js";
 import { ContentRoutes } from "#routes/content.routes.js";
 
-appRoutes.get("/", (req, res) => {
+appRoutes.get("/api", (req, res) => {
   res.sendFile(path.resolve("README.md"));
 });
 
-appRoutes.use("/auth", AuthRoutes);
+appRoutes.use("/api/auth", AuthRoutes);
 
-appRoutes.use("/user", AuthMiddleware, UserRoutes);
+appRoutes.use("/api/user", AuthMiddleware, UserRoutes);
 
-appRoutes.use("/category", CategoryRoutes);
+appRoutes.use("/api/category", CategoryRoutes);
 
-appRoutes.use("/sosmed", SosmedRoutes);
+appRoutes.use("/api/sosmed", SosmedRoutes);
 
-appRoutes.use("/facility", FacilityRoutes);
+appRoutes.use("/api/facility", FacilityRoutes);
 
-appRoutes.use("/testimony", TestimonyRoutes);
+appRoutes.use("/api/testimony", TestimonyRoutes);
 
-appRoutes.use("/content", ContentRoutes);
+appRoutes.use("/api/content", ContentRoutes);
 
 appRoutes.use((err, req, res, next) => {
   const status = 500;
   const code = "InternalServerError";
-
-  console.error(err);
 
   if (err instanceof AppError) {
     return Flash.fail(res, { status: err.status, code: err.message });

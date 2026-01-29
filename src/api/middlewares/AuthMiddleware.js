@@ -9,7 +9,7 @@ export const AuthMiddleware = async (req, res, next) => {
       throw new AppError("AccessNotFound", HTTP_FAILED.UNAUTHORIZED);
     }
 
-    if (authorization.startsWith("Bearer ")) {
+    if (!authorization.startsWith("Bearer ")) {
       throw new AppError(
         "InvalidAuthorizationFormat",
         HTTP_FAILED.UNAUTHORIZED,

@@ -14,3 +14,7 @@ AuthRoutes.post(
   ZodMiddleware(AuthValidation.login),
   AuthController.login,
 );
+
+AuthRoutes.post("/refresh", AuthController.refresh);
+
+AuthRoutes.get("/remember-me", AuthController.hasLogin);

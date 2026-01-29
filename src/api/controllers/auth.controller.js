@@ -1,5 +1,6 @@
 import { AuthService } from "#api/services/auth.service.js";
 import { Flash, HTTP_SUCCESS } from "#utils/Flash.js";
+import { jwt } from "#utils/Jwt.js";
 
 export const AuthController = {
   async login(req, res, next) {
@@ -51,5 +52,22 @@ export const AuthController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  async hasLogin(req, res) {
+    const cookies = req.cookies;
+    const refresh_token = cookies.refresh_token;
+
+    const rememberMe = await AuthService.hasLogin(refresh_token);
+
+    if (!rememberMe) {
+      throw new AppError("CannotIdentify", 404);
+    }
+
+    return Flash.success(res, {
+      code: "YouAreLoggedIn",
+      status: HTTP_SUCCESS.ACCEPTED,
+      data: rememberMe,
+    });
   },
 };

@@ -25,16 +25,18 @@ export const AuthService = {
       }
 
       const userId = user.id;
-      const jti = randomUUID();
 
       if (user.tokens) {
-        await prisma.tokens.delete({ where: { id: jti } });
+        const oldJti = user.tokens.id;
+        await prisma.tokens.delete({ where: { id: oldJti } });
       }
 
+      const jti = randomUUID();
       const refreshToken = jwt.createRefreshToken(userId, jti);
       const accessToken = jwt.createAccessToken(userId);
 
       const hashRefreshToken = await Hash.make(refreshToken);
+
       await prisma.tokens.create({
         data: { id: jti, token: hashRefreshToken, user_id: userId },
       });
@@ -70,10 +72,10 @@ export const AuthService = {
       const verifyRefreshToken = jwt.verifyRefreshToken(cookieRefreshToken);
 
       const sub = verifyRefreshToken?.sub;
-      const jti = verifyRefreshToken?.jti;
+      const oldJti = verifyRefreshToken?.jti;
 
       const findRefreshToken = await prisma.tokens.findUnique({
-        where: { id: jti },
+        where: { id: oldJti },
       });
 
       if (!findRefreshToken) {
@@ -96,7 +98,7 @@ export const AuthService = {
       const hashRefreshToken = await Hash.make(newRefreshToken);
 
       await prisma.tokens.update({
-        data: { id: newJti, token: hashToken },
+        data: { id: newJti, token: hashRefreshToken },
         where: { id: oldJti },
       });
 
@@ -120,6 +122,46 @@ export const AuthService = {
           status: HTTP_FAILED.NOT_FOUND,
         },
       });
+    }
+  },
+
+  async hasLogin(cookieRefreshToken) {
+    try {
+      if (!cookieRefreshToken) {
+        throw new AppError("CredentialNotFound", HTTP_FAILED.UNAUTHORIZED);
+      }
+
+      const verifyRefreshToken = jwt.verifyRefreshToken(cookieRefreshToken);
+
+      const jti = verifyRefreshToken?.jti;
+
+      const findRefreshToken = await prisma.tokens.findUnique({
+        where: { id: jti },
+      });
+
+      if (!findRefreshToken) {
+        throw new AppError("CredentialNotFound", HTTP_FAILED.UNAUTHORIZED);
+      }
+
+      const compareRefreshToken = await Hash.compare(
+        cookieRefreshToken,
+        findRefreshToken.token,
+      );
+
+      if (!compareRefreshToken) {
+        throw new AppError("CredentialNotMatch", HTTP_FAILED.UNAUTHORIZED);
+      }
+
+      const sub = verifyRefreshToken?.sub;
+      const user_id = Number(sub);
+      const user = await prisma.users.findUnique({
+        where: { id: user_id },
+        select: { name: true, username: true },
+      });
+
+      return user;
+    } catch (error) {
+      throw new AppError("CannotIdentify", 404);
     }
   },
 };

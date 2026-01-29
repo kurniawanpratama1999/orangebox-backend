@@ -24,7 +24,7 @@ model tokens {
   user_id Int    @unique
   token   String @db.LongText
 
-  expired_at DateTime
+  expired_at DateTime?
 
   user    users  @relation(fields: [user_id], references: [id])
 }

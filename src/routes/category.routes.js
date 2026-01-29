@@ -6,7 +6,7 @@ import { Router } from "express";
 
 export const CategoryRoutes = Router();
 
-CategoryRoutes.get("/", CategoryController.index);
+CategoryRoutes.get("/", AuthMiddleware, CategoryController.index);
 
 CategoryRoutes.get("/:id", CategoryController.show);
 

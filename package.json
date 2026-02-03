@@ -25,6 +25,8 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "sharp": "^0.34.5",
     "zod": "^4.3.5"
   },
   "devDependencies": {

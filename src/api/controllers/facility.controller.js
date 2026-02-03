@@ -7,9 +7,9 @@ export const FacilityController = {
       const facilities = await FacilityService.index();
 
       return Flash.success(res, {
-        status: HTTP_SUCCESS.ACCEPTED,
-        code: "GetFacilitiesIsSuccess",
-        data: facilities,
+        status: HTTP_SUCCESS.OK,
+        message: "get all facility",
+        results: facilities,
       });
     } catch (e) {
       next(e);
@@ -23,9 +23,9 @@ export const FacilityController = {
       const facilityById = await FacilityService.show(id);
 
       return Flash.success(res, {
-        status: HTTP_SUCCESS.ACCEPTED,
-        code: "GetFacilityIsSuccess",
-        data: facilityById,
+        status: HTTP_SUCCESS.OK,
+        message: "get facility",
+        results: facilityById,
       });
     } catch (e) {
       next(e);
@@ -34,17 +34,12 @@ export const FacilityController = {
 
   async create(req, res, next) {
     try {
-      const body = req.body;
-
-      const createFacility = await FacilityService.create({
-        name: body.name,
-        photo: body.photo,
-      });
+      const createFacility = await FacilityService.create(req.body, req.file);
 
       return Flash.success(res, {
-        status: "NewFacilityIsCreated",
-        code: HTTP_SUCCESS.CREATED,
-        data: createFacility,
+        status: HTTP_SUCCESS.CREATED,
+        message: "facility created",
+        results: createFacility,
       });
     } catch (e) {
       next(e);
@@ -55,17 +50,16 @@ export const FacilityController = {
     try {
       const id = req.params.id;
 
-      const body = req.body;
-
-      const updateFacilityById = await FacilityService.update(id, {
-        name: body.name,
-        photo: body.photo,
-      });
+      const updateFacilityById = await FacilityService.update(
+        id,
+        req.body,
+        req.file,
+      );
 
       return Flash.success(res, {
-        status: "UpdateFacilityIsSuccess",
-        code: HTTP_SUCCESS.OK,
-        data: updateFacilityById,
+        status: HTTP_SUCCESS.OK,
+        message: "facility updated",
+        results: updateFacilityById,
       });
     } catch (e) {
       next(e);
@@ -79,8 +73,8 @@ export const FacilityController = {
       await FacilityService.destroy(id);
 
       return Flash.success(res, {
-        status: "FacilityIsDeleted",
-        code: HTTP_SUCCESS.NO_CONTENT,
+        status: HTTP_SUCCESS.NO_CONTENT,
+        message: "facility deleted",
       });
     } catch (e) {
       next(e);

@@ -5,11 +5,7 @@ import { jwt } from "#utils/Jwt.js";
 export const AuthController = {
   async login(req, res, next) {
     try {
-      const body = req.body;
-      const username = body.username;
-      const password = body.password;
-
-      const loginService = await AuthService.login(username, password);
+      const loginService = await AuthService.login(req.body);
 
       res.cookie("refresh_token", loginService.refreshToken, {
         maxAge: 1000 * 60 * 15,
@@ -21,11 +17,11 @@ export const AuthController = {
 
       return Flash.success(res, {
         status: HTTP_SUCCESS.CREATED,
-        code: "LoginSuccess",
-        data: loginService.accessToken,
+        message: "login success",
+        results: loginService.accessToken,
       });
-    } catch (error) {
-      next(error);
+    } catch (e) {
+      next(e);
     }
   },
 
@@ -47,7 +43,7 @@ export const AuthController = {
       return Flash.success(res, {
         status: HTTP_SUCCESS.CREATED,
         code: "NewAccessCreated",
-        data: refreshService.accessToken,
+        results: refreshService.accessToken,
       });
     } catch (error) {
       next(error);
@@ -67,7 +63,7 @@ export const AuthController = {
     return Flash.success(res, {
       code: "YouAreLoggedIn",
       status: HTTP_SUCCESS.ACCEPTED,
-      data: rememberMe,
+      results: rememberMe,
     });
   },
 };

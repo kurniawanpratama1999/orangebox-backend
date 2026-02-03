@@ -6,14 +6,11 @@ export const AuthMiddleware = async (req, res, next) => {
   try {
     const authorization = req.headers.authorization;
     if (!authorization) {
-      throw new AppError("AccessNotFound", HTTP_FAILED.UNAUTHORIZED);
+      throw new AppError("access can't found", HTTP_FAILED.UNAUTHORIZED);
     }
 
     if (!authorization.startsWith("Bearer ")) {
-      throw new AppError(
-        "InvalidAuthorizationFormat",
-        HTTP_FAILED.UNAUTHORIZED,
-      );
+      throw new AppError("session invalid", HTTP_FAILED.UNAUTHORIZED);
     }
 
     const accessToken = authorization.split(" ")[1];
@@ -22,12 +19,12 @@ export const AuthMiddleware = async (req, res, next) => {
     const sub = verifyAccessToken?.sub;
 
     if (!sub) {
-      throw new AppError("InvalidUserId", HTTP_FAILED.UNAUTHORIZED);
+      throw new AppError("invalid user id", HTTP_FAILED.UNAUTHORIZED);
     }
 
     const user_id = Number(sub);
     if (Number.isNaN(user_id)) {
-      throw new AppError("InvalidUserId", HTTP_FAILED.UNAUTHORIZED);
+      throw new AppError("invalid user id", HTTP_FAILED.UNAUTHORIZED);
     }
 
     req.user_id = user_id;

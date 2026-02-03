@@ -9,12 +9,19 @@ export const UserValidation = {
   }),
 
   update: z.object({
-    name: z.string(),
-    username: z.string(),
+    name: z.string().nullable(),
+    username: z.string().nullable(),
   }),
 
   updatePassword: z.object({
     password: z.string(),
     password_confirmation: z.string(),
+  }),
+
+  photo: z.object({
+    originalname: z.string(),
+    mimetype: z.string().startsWith("image"),
+    buffer: z.instanceof(Buffer),
+    size: z.number().max(1024 * 1024 * 10, "file image should less then 10mb"),
   }),
 };

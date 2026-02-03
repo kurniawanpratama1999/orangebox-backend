@@ -25,14 +25,14 @@ export const jwt = {
       return jsonwebtoken.verify(token, tokenEnv.refresh);
     } catch (error) {
       if (error instanceof jsonwebtoken.TokenExpiredError) {
-        throw new AppError("CredentialExpired", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session expired", HTTP_FAILED.UNAUTHORIZED);
       }
 
       if (error instanceof jsonwebtoken.JsonWebTokenError) {
-        throw new AppError("InvalidToken", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session ivalid", HTTP_FAILED.UNAUTHORIZED);
       }
 
-      throw new AppError("InternalServerError", HTTP_FAILED.UNAUTHORIZED);
+      throw new AppError("internal server error", HTTP_FAILED.UNAUTHORIZED);
     }
   },
 
@@ -41,14 +41,14 @@ export const jwt = {
       return jsonwebtoken.verify(token, tokenEnv.access);
     } catch (error) {
       if (error instanceof jsonwebtoken.TokenExpiredError) {
-        throw new AppError("AccessExpired", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("access expired", HTTP_FAILED.UNAUTHORIZED);
       }
 
       if (error instanceof jsonwebtoken.JsonWebTokenError) {
-        throw new AppError("InvalidToken", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("access invalid", HTTP_FAILED.UNAUTHORIZED);
       }
 
-      throw new AppError("InternalServerError", HTTP_FAILED.UNAUTHORIZED);
+      throw new AppError("internal server error", HTTP_FAILED.UNAUTHORIZED);
     }
   },
 };

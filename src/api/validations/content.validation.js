@@ -5,7 +5,6 @@ export const ContentValidation = {
     umkm_name: z.string().nullable(),
     umkm_address: z.string().nullable(),
 
-    hero_photo: z.string().nullable(),
     hero_headline: z.string().nullable(),
     hero_subheadline: z.string().nullable(),
     hero_description: z.string().nullable(),
@@ -24,7 +23,6 @@ export const ContentValidation = {
     testimoni_title: z.string().nullable(),
     testimoni_information: z.string().nullable(),
 
-    location_photo: z.string().nullable(),
     location_title: z.string().nullable(),
     location_maps: z.string().nullable(),
     location_button: z.string().nullable(),

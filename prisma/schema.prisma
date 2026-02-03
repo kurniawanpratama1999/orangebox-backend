@@ -9,6 +9,7 @@ datasource db {
 
 model users {
   id       Int    @id @default(autoincrement())
+  photo    String? @db.LongText
   name     String
   username String @unique
   password String @db.LongText
@@ -54,10 +55,11 @@ model products {
 }
 
 model sosmeds {
-  id   Int @id @default(autoincrement())
-  name String @unique
+  id          Int @id @default(autoincrement())
+  photo       String? @db.LongText
+  name        String @unique
   description String
-  link String @db.LongText
+  link        String @db.LongText
 
   content_cta      content? @relation("content_cta")
   content_location content? @relation("content_location")
@@ -65,7 +67,7 @@ model sosmeds {
 
 model facilities {
   id Int @id @default(autoincrement())
-  photo String @db.LongText
+  photo String? @db.LongText
   name String
 }
 

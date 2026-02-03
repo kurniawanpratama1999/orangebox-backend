@@ -7,9 +7,9 @@ export const TestimonyController = {
       const testimonies = await TestimonyService.index();
 
       return Flash.success(res, {
-        status: HTTP_SUCCESS.ACCEPTED,
-        code: "GetTestimoniesIsSuccess",
-        data: testimonies,
+        status: HTTP_SUCCESS.OK,
+        message: "get all testimony",
+        results: testimonies,
       });
     } catch (e) {
       next(e);
@@ -23,9 +23,9 @@ export const TestimonyController = {
       const testimonyById = await TestimonyService.show(id);
 
       return Flash.success(res, {
-        status: HTTP_SUCCESS.ACCEPTED,
-        code: "GetTestimonyIsSuccess",
-        data: testimonyById,
+        status: HTTP_SUCCESS.OK,
+        message: "get testimony",
+        results: testimonyById,
       });
     } catch (e) {
       next(e);
@@ -36,16 +36,12 @@ export const TestimonyController = {
     try {
       const body = req.body;
 
-      const createTestimony = await TestimonyService.create({
-        name: body.name,
-        photo: body.photo,
-        description: body.description,
-      });
+      const createTestimony = await TestimonyService.create(req.body, req.file);
 
       return Flash.success(res, {
-        status: "NewTestimonyIsCreated",
-        code: HTTP_SUCCESS.CREATED,
-        data: createTestimony,
+        status: HTTP_SUCCESS.CREATED,
+        message: "testimony created",
+        results: createTestimony,
       });
     } catch (e) {
       next(e);
@@ -56,18 +52,16 @@ export const TestimonyController = {
     try {
       const id = req.params.id;
 
-      const body = req.body;
-
-      const updateTestimonyById = await TestimonyService.update(id, {
-        name: body.name,
-        photo: body.photo,
-        description: body.description,
-      });
+      const updateTestimonyById = await TestimonyService.update(
+        id,
+        req.body,
+        req.file,
+      );
 
       return Flash.success(res, {
-        status: "UpdateTestimonyIsSuccess",
-        code: HTTP_SUCCESS.OK,
-        data: updateTestimonyById,
+        status: HTTP_SUCCESS.OK,
+        message: "testimony updated",
+        results: updateTestimonyById,
       });
     } catch (e) {
       next(e);
@@ -81,8 +75,8 @@ export const TestimonyController = {
       await TestimonyService.destroy(id);
 
       return Flash.success(res, {
-        status: "TestimonyIsDeleted",
-        code: HTTP_SUCCESS.NO_CONTENT,
+        status: HTTP_SUCCESS.NO_CONTENT,
+        message: "testimony deleted",
       });
     } catch (e) {
       next(e);

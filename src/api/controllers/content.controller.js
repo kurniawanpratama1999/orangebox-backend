@@ -7,9 +7,9 @@ export const ContentController = {
       const contents = await ContentService.index();
 
       return Flash.success(res, {
-        status: HTTP_SUCCESS.ACCEPTED,
-        code: "GetContentsIsSuccess",
-        data: contents,
+        status: HTTP_SUCCESS.OK,
+        message: "get content is success",
+        results: contents,
       });
     } catch (e) {
       next(e);
@@ -18,14 +18,12 @@ export const ContentController = {
 
   async update(req, res, next) {
     try {
-      const body = req.body;
-
-      const updateContent = await ContentService.update(body);
+      const updateContent = await ContentService.update(req.body, req.files);
 
       return Flash.success(res, {
-        status: "UpdateContentIsSuccess",
-        code: HTTP_SUCCESS.OK,
-        data: updateContent,
+        status: HTTP_SUCCESS.OK,
+        message: "content updated",
+        results: updateContent,
       });
     } catch (e) {
       next(e);

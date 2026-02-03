@@ -18,32 +18,32 @@ export const ContentService = {
     return content;
   },
 
-  async update(data) {
+  async update(reqBody) {
     try {
       const findFirst = await prisma.content.findFirst();
 
       const firstId = findFirst.id;
 
       const updated = await prisma.content.update({
-        data,
+        data: reqBody,
         where: { id: firstId },
       });
 
       if (!updated) {
-        throw new AppError("ContentNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("content not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       useCache.set(key, updated);
       return updated;
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2002: {
-          code: "ContentAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "content already exist",
         },
         P2025: {
-          code: "ContentIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
+          message: "content not found",
         },
       });
     }

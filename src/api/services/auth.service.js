@@ -7,21 +7,30 @@ import { jwt } from "#utils/Jwt.js";
 import { randomUUID } from "crypto";
 
 export const AuthService = {
-  async login(username, password) {
+  async login(reqBody) {
     try {
       const user = await prisma.users.findUnique({
         include: { tokens: true },
-        where: { username },
+        where: { username: reqBody.username },
       });
 
       if (!user) {
-        throw new AppError("WrongUsernameOrPassword", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError(
+          "wrong username or password",
+          HTTP_FAILED.BAD_REQUEST,
+        );
       }
 
-      const comparePassword = await Hash.compare(password, user.password);
+      const comparePassword = await Hash.compare(
+        reqBody.password,
+        user.password,
+      );
 
       if (!comparePassword) {
-        throw new AppError("WrongUsernameOrPassword", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError(
+          "wrong username or password",
+          HTTP_FAILED.BAD_REQUEST,
+        );
       }
 
       const userId = user.id;
@@ -45,18 +54,18 @@ export const AuthService = {
         refreshToken,
         accessToken,
       };
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2002: {
-          code: "TokenAlreadyExist",
+          message: "login failed",
           status: HTTP_FAILED.BAD_REQUEST,
         },
         P2003: {
-          code: "TokenInUse",
+          message: "login failed",
           status: HTTP_FAILED.BAD_REQUEST,
         },
         P2025: {
-          code: "TokenNotFound",
+          message: "login failed",
           status: HTTP_FAILED.NOT_FOUND,
         },
       });
@@ -66,7 +75,7 @@ export const AuthService = {
   async refreshToken(cookieRefreshToken) {
     try {
       if (!cookieRefreshToken) {
-        throw new AppError("CredentialNotFound", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session expired", HTTP_FAILED.UNAUTHORIZED);
       }
 
       const verifyRefreshToken = jwt.verifyRefreshToken(cookieRefreshToken);
@@ -79,7 +88,7 @@ export const AuthService = {
       });
 
       if (!findRefreshToken) {
-        throw new AppError("CredentialNotFound", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session expired", HTTP_FAILED.UNAUTHORIZED);
       }
 
       const compareRefreshToken = await Hash.compare(
@@ -88,7 +97,7 @@ export const AuthService = {
       );
 
       if (!compareRefreshToken) {
-        throw new AppError("CredentialNotMatch", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session not match", HTTP_FAILED.UNAUTHORIZED);
       }
 
       const newJti = randomUUID();
@@ -105,20 +114,20 @@ export const AuthService = {
       const accessToken = jwt.createAccessToken(sub);
 
       return { newRefreshToken, accessToken };
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2002: {
-          code: "TokenAlreadyExist",
+          message: "session expired",
           status: HTTP_FAILED.BAD_REQUEST,
         },
 
         P2003: {
-          code: "TokenInUse",
+          message: "session expired",
           status: HTTP_FAILED.BAD_REQUEST,
         },
 
         P2025: {
-          code: "TokenNotFound",
+          message: "session expired",
           status: HTTP_FAILED.NOT_FOUND,
         },
       });
@@ -128,7 +137,7 @@ export const AuthService = {
   async hasLogin(cookieRefreshToken) {
     try {
       if (!cookieRefreshToken) {
-        throw new AppError("CredentialNotFound", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session expired", HTTP_FAILED.UNAUTHORIZED);
       }
 
       const verifyRefreshToken = jwt.verifyRefreshToken(cookieRefreshToken);
@@ -140,7 +149,7 @@ export const AuthService = {
       });
 
       if (!findRefreshToken) {
-        throw new AppError("CredentialNotFound", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session expired", HTTP_FAILED.UNAUTHORIZED);
       }
 
       const compareRefreshToken = await Hash.compare(
@@ -149,7 +158,7 @@ export const AuthService = {
       );
 
       if (!compareRefreshToken) {
-        throw new AppError("CredentialNotMatch", HTTP_FAILED.UNAUTHORIZED);
+        throw new AppError("session not match", HTTP_FAILED.UNAUTHORIZED);
       }
 
       const sub = verifyRefreshToken?.sub;
@@ -160,8 +169,8 @@ export const AuthService = {
       });
 
       return user;
-    } catch (error) {
-      throw new AppError("CannotIdentify", 404);
+    } catch (e) {
+      throw new AppError("session not found", 404);
     }
   },
 };

@@ -18,19 +18,19 @@ export const HTTP_SUCCESS = {
 };
 
 export const Flash = {
-  success(res, { status, code, data = null }) {
+  success(res, { status, message, results = null }) {
     return res.status(status).send({
       success: true,
-      code,
-      data,
+      message,
+      results,
     });
   },
 
-  fail(res, { status, code, error = null }) {
+  fail(res, { status, message, error = null }) {
     return res.status(status).send({
       success: false,
-      code,
-      data: null,
+      message,
+      results: null,
       error,
     });
   },

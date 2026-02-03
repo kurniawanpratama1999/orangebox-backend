@@ -1,15 +1,15 @@
-import { CategoryService } from "#api/services/category.service.js";
+import { ProductService } from "#api/services/product.service.js";
 import { Flash, HTTP_SUCCESS } from "#utils/Flash.js";
 
-export const CategoryController = {
+export const ProductController = {
   async index(req, res, next) {
     try {
-      const categories = await CategoryService.index();
+      const products = await ProductService.index();
 
       return Flash.success(res, {
         status: HTTP_SUCCESS.OK,
-        message: "get all category",
-        results: categories,
+        message: "get all product",
+        results: products,
       });
     } catch (e) {
       next(e);
@@ -20,12 +20,12 @@ export const CategoryController = {
     try {
       const id = req.params.id;
 
-      const categoryById = await CategoryService.show(id);
+      const productById = await ProductService.show(id);
 
       return Flash.success(res, {
         status: HTTP_SUCCESS.OK,
-        message: "get category",
-        results: categoryById,
+        message: "get product",
+        results: productById,
       });
     } catch (e) {
       next(e);
@@ -34,12 +34,12 @@ export const CategoryController = {
 
   async create(req, res, next) {
     try {
-      const createCategory = await CategoryService.create(req.body);
+      const createProduct = await ProductService.create(req.body, req.file);
 
       return Flash.success(res, {
         status: HTTP_SUCCESS.CREATED,
-        message: "category created",
-        results: createCategory,
+        message: "product created",
+        results: createProduct,
       });
     } catch (e) {
       next(e);
@@ -50,12 +50,16 @@ export const CategoryController = {
     try {
       const id = req.params.id;
 
-      const updateCategoryById = await CategoryService.update(id, req.body);
+      const updateProductById = await ProductService.update(
+        id,
+        req.body,
+        req.file,
+      );
 
       return Flash.success(res, {
         status: HTTP_SUCCESS.OK,
-        message: "category updated",
-        results: updateCategoryById,
+        message: "product updated",
+        results: updateProductById,
       });
     } catch (e) {
       next(e);
@@ -66,11 +70,11 @@ export const CategoryController = {
     try {
       const id = req.params.id;
 
-      await CategoryService.destroy(id);
+      await ProductService.destroy(id);
 
       return Flash.success(res, {
-        status: HTTP_SUCCESS.NO_CONTENT,
-        message: "category deleted",
+        status: "product deleted",
+        message: HTTP_SUCCESS.NO_CONTENT,
       });
     } catch (e) {
       next(e);

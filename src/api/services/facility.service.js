@@ -2,9 +2,19 @@ import { prisma } from "#orm/lib/prisma.js";
 import { useCache } from "#store/cache.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
+import { HandleImage } from "#utils/HandleImage.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
 
 const key = "facility:all";
+
+const configHandleImage = {
+  folderName: "facility",
+  prefixName: "facilityImage",
+  qualityPercentage: 60,
+  sizePixel: "auto",
+  targetKb: "none",
+};
+
 export const FacilityService = {
   async index() {
     if (useCache.has(key)) {
@@ -20,13 +30,13 @@ export const FacilityService = {
 
   async show(id) {
     if (!id) {
-      throw new AppError("FacilityIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("facility id not found", HTTP_FAILED.BAD_REQUEST);
     }
 
     const facility_id = Number(id);
 
     if (Number.isNaN(facility_id)) {
-      throw new AppError("InvalidFacilityId", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("invalid facility id", HTTP_FAILED.BAD_REQUEST);
     }
 
     const facilities = useCache.get(key) ?? [];
@@ -45,57 +55,88 @@ export const FacilityService = {
     });
 
     if (!facilityById) {
-      throw new AppError("FacilityNotFound", HTTP_FAILED.NOT_FOUND);
+      throw new AppError("facility not found", HTTP_FAILED.NOT_FOUND);
     }
 
     return facilityById;
   },
 
-  async create({ name, photo }) {
+  async create(reqBody, reqFile) {
+    let created;
     try {
-      const newData = await prisma.facilities.create({
-        data: {
-          name,
-          photo,
-        },
+      const handleImage = new HandleImage(configHandleImage);
+
+      await handleImage.convert(reqFile.buffer);
+
+      const data = { ...reqBody, photo: handleImage.fileName };
+
+      created = await prisma.facilities.create({
+        data,
       });
 
-      const facilities = useCache.get(key) ?? [];
-      useCache.set(key, [...facilities, newData]);
+      await handleImage.save();
 
-      return newData;
-    } catch (error) {
-      throw HandlePrismaError(error, {
+      const facilities = useCache.get(key) ?? [];
+      useCache.set(key, [...facilities, created]);
+
+      return created;
+    } catch (e) {
+      if (created?.id) {
+        await prisma.facilities.delete({ where: { id: created.id } });
+      }
+      throw HandlePrismaError(e, {
         P2002: {
-          code: "FacilityAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "facility already exist",
         },
       });
     }
   },
 
-  async update(id, { name, photo }) {
+  async update(id, reqBody, reqFile) {
     try {
       if (!id) {
-        throw new AppError("FacilityIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("facility id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const facility_id = Number(id);
 
       if (Number.isNaN(facility_id)) {
-        throw new AppError("InvalidFacilityId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid facility id", HTTP_FAILED.BAD_REQUEST);
       }
 
-      const updated = await prisma.facilities.update({
-        data: {
-          name,
-          photo,
-        },
-        where: { id: facility_id },
+      let data = reqBody;
+
+      const handleImage = new HandleImage(configHandleImage);
+
+      if (reqFile) {
+        await handleImage.convert(reqFile.buffer);
+
+        data = { ...reqBody, photo: handleImage.fileName };
+      }
+
+      const result = await prisma.$transaction(async (trx) => {
+        const facility = await trx.facilities.findUnique({
+          where: { id: facility_id },
+        });
+
+        if (!facility) {
+          throw new AppError("facility not found", HTTP_FAILED.NOT_FOUND);
+        }
+
+        const updated = await trx.facilities.update({
+          where: { id: facility_id },
+          data,
+        });
+
+        return { facility, updated };
       });
 
-      if (!updated) {
-        throw new AppError("FacilityNotFound", HTTP_FAILED.BAD_REQUEST);
+      if (reqFile) {
+        await handleImage.save();
+        if (result.facility?.photo) {
+          await HandleImage.delete(result.facility.photo);
+        }
       }
 
       const facilities = useCache.get(key) ?? [];
@@ -108,15 +149,15 @@ export const FacilityService = {
       );
 
       return updated;
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2002: {
-          code: "FacilityAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "facility already exist",
         },
         P2025: {
-          code: "FacilityIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
+          message: "facility id not found",
         },
       });
     }
@@ -125,18 +166,22 @@ export const FacilityService = {
   async destroy(id) {
     try {
       if (!id) {
-        throw new AppError("FacilityIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("facility id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const facility_id = Number(id);
 
       if (Number.isNaN(facility_id)) {
-        throw new AppError("InvalidFacilityId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid facility id", HTTP_FAILED.BAD_REQUEST);
       }
 
       const deleted = await prisma.facilities.delete({
         where: { id: facility_id },
       });
+
+      if (deleted.photo) {
+        await HandleImage.delete(deleted.photo);
+      }
 
       const facilities = useCache.get(key) ?? [];
       useCache.set(
@@ -145,15 +190,15 @@ export const FacilityService = {
       );
 
       return deleted;
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2025: {
-          code: "FacilityIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
+          message: "facility id not found",
         },
         P2003: {
-          code: "FacilityInUse",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "facility still use on other table",
         },
       });
     }

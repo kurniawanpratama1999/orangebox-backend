@@ -2,7 +2,19 @@ import { prisma } from "#orm/lib/prisma.js";
 import { useCache } from "#store/cache.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
+import { HandleImage } from "#utils/HandleImage.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
+
+const configHandleImage = {
+  folderName: "sosmed",
+  prefixName: "sosmedImage",
+  qualityPercentage: 60,
+  sizePixel: {
+    width: 100,
+    height: 100,
+  },
+  targetKb: 100,
+};
 
 const key = "sosmed:all";
 export const SosmedService = {
@@ -20,13 +32,13 @@ export const SosmedService = {
 
   async show(id) {
     if (!id) {
-      throw new AppError("SosmedIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("sosmed id not found", HTTP_FAILED.BAD_REQUEST);
     }
 
     const sosmed_id = Number(id);
 
     if (Number.isNaN(sosmed_id)) {
-      throw new AppError("InvalidSosmedId", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("invalid sosmed id", HTTP_FAILED.BAD_REQUEST);
     }
 
     const sosmeds = useCache.get(key) ?? [];
@@ -44,59 +56,88 @@ export const SosmedService = {
     });
 
     if (!sosmedById) {
-      throw new AppError("SosmedNotFound", HTTP_FAILED.NOT_FOUND);
+      throw new AppError("sosmed not found", HTTP_FAILED.NOT_FOUND);
     }
 
     return sosmedById;
   },
 
-  async create({ name, description, link }) {
+  async create(reqBody, reqFile) {
+    let created = null;
     try {
-      const newData = await prisma.sosmeds.create({
-        data: {
-          name,
-          description,
-          link,
-        },
+      const handleImage = new HandleImage(configHandleImage);
+
+      await handleImage.convert(reqFile.buffer);
+
+      const data = { ...reqBody, photo: handleImage.fileName };
+
+      created = await prisma.sosmeds.create({
+        data,
       });
 
-      const sosmeds = useCache.get(key) ?? [];
-      useCache.set(key, [...sosmeds, newData]);
+      await handleImage.save();
 
-      return newData;
+      const sosmeds = useCache.get(key) ?? [];
+      useCache.set(key, [...sosmeds, created]);
+
+      return created;
     } catch (error) {
+      if (created?.id) {
+        await prisma.sosmeds.delete({ where: { id: created.id } });
+      }
+
       throw HandlePrismaError(error, {
         P2002: {
-          code: "SosmedAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "sosmed already exist",
         },
       });
     }
   },
 
-  async update(id, { name, description, link }) {
+  async update(id, reqBody, reqFile) {
     try {
       if (!id) {
-        throw new AppError("SosmedIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("sosmed id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const sosmed_id = Number(id);
 
       if (Number.isNaN(sosmed_id)) {
-        throw new AppError("InvalidSosmedId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid sosmed id", HTTP_FAILED.BAD_REQUEST);
       }
 
-      const updated = await prisma.sosmeds.update({
-        data: {
-          name,
-          description,
-          link,
-        },
-        where: { id: sosmed_id },
+      let data = reqBody;
+      const handleImage = new HandleImage(configHandleImage);
+
+      if (reqFile) {
+        await handleImage.convert(reqFile.buffer);
+
+        data = { ...reqBody, photo: handleImage.fileName };
+      }
+
+      const result = await prisma.$transaction(async (trx) => {
+        const sosmed = await trx.sosmeds.findUnique({
+          where: { id: sosmed_id },
+        });
+
+        if (!sosmed) {
+          throw new AppError("sosmed not found", HTTP_FAILED.NOT_FOUND);
+        }
+
+        const updated = await trx.sosmeds.update({
+          where: { id: sosmed_id },
+          data,
+        });
+
+        return { sosmed, updated };
       });
 
-      if (!updated) {
-        throw new AppError("SosmedNotFound", HTTP_FAILED.BAD_REQUEST);
+      if (reqFile) {
+        await handleImage.save();
+        if (result.sosmed?.photo) {
+          await HandleImage.delete(result.sosmed.photo);
+        }
       }
 
       const sosmeds = useCache.get(key);
@@ -106,16 +147,16 @@ export const SosmedService = {
         sosmeds.map((s) => (s.id === sosmed_id ? updated : s)),
       );
 
-      return updated;
+      return result.updated;
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
-          code: "SosmedAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "sosmed already exist",
         },
         P2025: {
-          code: "SosmedIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
+          message: "sosmed id not found",
         },
       });
     }
@@ -124,16 +165,20 @@ export const SosmedService = {
   async destroy(id) {
     try {
       if (!id) {
-        throw new AppError("SosmedIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("sosmed id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const sosmed_id = Number(id);
 
       if (Number.isNaN(sosmed_id)) {
-        throw new AppError("InvalidSosmedId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid sosmed id", HTTP_FAILED.BAD_REQUEST);
       }
 
       const deleted = await prisma.sosmeds.delete({ where: { id: sosmed_id } });
+
+      if (deleted.photo) {
+        await HandleImage.delete(deleted.photo);
+      }
 
       const sosmeds = useCache.get(key);
 
@@ -146,12 +191,12 @@ export const SosmedService = {
     } catch (error) {
       throw HandlePrismaError(error, {
         P2025: {
-          code: "SosmedIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
+          message: "sosmed id not found",
         },
         P2003: {
-          code: "SosmedInUse",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "sosmed still use on other table",
         },
       });
     }

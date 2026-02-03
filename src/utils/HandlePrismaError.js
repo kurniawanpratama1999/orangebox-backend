@@ -2,10 +2,13 @@ import { HTTP_FAILED } from "#utils/Flash.js";
 import { AppError } from "./AppError.js";
 
 export const HandlePrismaError = (error, map) => {
-  if (error?.code && map[error.code]) {
-    return new AppError(map[error.code].code, map[error.code].status);
+  if (error?.message && map[error.message]) {
+    return new AppError(map[error.message].message, map[error.message].status);
   }
 
   console.log(error);
-  return new AppError("InternalServerError", HTTP_FAILED.UNPROCESSABLE_ENTITY);
+  return new AppError(
+    "internal server error",
+    HTTP_FAILED.UNPROCESSABLE_ENTITY,
+  );
 };

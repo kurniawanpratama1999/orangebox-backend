@@ -8,9 +8,9 @@ export const UserController = {
       const user = await UserService.index();
 
       return Flash.success(res, {
-        code: "GetUsersIsSuccess",
-        status: HTTP_SUCCESS.ACCEPTED,
-        data: user,
+        status: HTTP_SUCCESS.OK,
+        message: "get all user",
+        results: user,
       });
     } catch (error) {
       next(error);
@@ -24,9 +24,9 @@ export const UserController = {
       const user = await UserService.showById(id);
 
       return Flash.success(res, {
-        code: "GetUserIsSuccess",
         status: HTTP_SUCCESS.OK,
-        data: user,
+        message: "get user",
+        results: user,
       });
     } catch (error) {
       next(error);
@@ -35,19 +35,12 @@ export const UserController = {
 
   async create(req, res, next) {
     try {
-      const body = req.body;
-
-      const user = await UserService.create({
-        name: body.name,
-        username: body.username,
-        password: body.password,
-        password_confirmation: body.password_confirmation,
-      });
+      const user = await UserService.create(req.body, req.file);
 
       return Flash.success(res, {
-        code: "CreateNewUserIsSuccess",
         status: HTTP_SUCCESS.CREATED,
-        data: user,
+        message: "user created",
+        results: user,
       });
     } catch (error) {
       next(error);
@@ -56,27 +49,13 @@ export const UserController = {
 
   async update(req, res, next) {
     try {
-      const userId = req.params.id;
-      if (!userId) {
-        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
-      }
+      const id = req.params.id;
 
-      const id = Number(userId);
-
-      if (Number.isNaN(id)) {
-        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
-      }
-
-      const body = req.body;
-      await UserService.update(id, {
-        name: body.name,
-        username: body.username,
-      });
+      await UserService.update(id, req.body, req.file);
 
       return Flash.success(res, {
-        code: "UpdateUserIsSuccess",
         status: HTTP_SUCCESS.OK,
-        data: null,
+        message: "user updated",
       });
     } catch (error) {
       next(error);
@@ -85,27 +64,13 @@ export const UserController = {
 
   async updatePassword(req, res, next) {
     try {
-      const userId = req.params.id;
-      if (!userId) {
-        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
-      }
+      const id = req.params.id;
 
-      const id = Number(userId);
-
-      if (Number.isNaN(id)) {
-        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
-      }
-
-      const body = req.body;
-      await UserService.updatePassword(id, {
-        password: body.password,
-        password_confirmation: body.password_confirmation,
-      });
+      await UserService.updatePassword(id, req.body);
 
       return Flash.success(res, {
-        code: "UpdatePasswordIsSuccess",
         status: HTTP_SUCCESS.OK,
-        data: null,
+        message: "password updated",
       });
     } catch (error) {
       next(error);
@@ -113,23 +78,13 @@ export const UserController = {
   },
   async destroy(req, res, next) {
     try {
-      const userId = req.params.id;
-      if (!userId) {
-        throw new AppError("ParamsIdNotFound", HTTP_FAILED.BAD_REQUEST);
-      }
-
-      const id = Number(userId);
-
-      if (Number.isNaN(id)) {
-        throw new AppError("InvalidParamsId", HTTP_FAILED.BAD_REQUEST);
-      }
+      const id = req.params.id;
 
       await UserService.destroy(id);
 
       return Flash.success(res, {
-        code: "DeleteUserIsSuccess",
         status: HTTP_SUCCESS.NO_CONTENT,
-        data: null,
+        message: "user deleted",
       });
     } catch (error) {
       next(error);

@@ -22,13 +22,13 @@ export const CategoryService = {
 
   async show(id) {
     if (!id) {
-      throw new AppError("CategoryIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("category id not found", HTTP_FAILED.BAD_REQUEST);
     }
 
     const category_id = Number(id);
 
     if (Number.isNaN(category_id)) {
-      throw new AppError("InvalidCategoryId", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("invalid category id", HTTP_FAILED.BAD_REQUEST);
     }
 
     if (useCache.has(key)) {
@@ -46,57 +46,49 @@ export const CategoryService = {
     });
 
     if (!categoryById) {
-      throw new AppError("CategoryNotFound", HTTP_FAILED.NOT_FOUND);
+      throw new AppError("category not found", HTTP_FAILED.NOT_FOUND);
     }
 
     return categoryById;
   },
 
-  async create({ name, description }) {
+  async create(reqBody) {
     try {
-      const newData = await prisma.categories.create({
-        data: {
-          name,
-          description,
-        },
-      });
+      const newData = await prisma.categories.create({ data: reqBody });
 
       const categories = useCache.get(key) ?? [];
       useCache.set(key, [...categories, newData]);
 
       return newData;
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2002: {
-          code: "CategoryAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "category name already exist",
         },
       });
     }
   },
 
-  async update(id, { name, description }) {
+  async update(id, reqBody) {
     try {
       if (!id) {
-        throw new AppError("CategoryIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("category id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const category_id = Number(id);
 
       if (Number.isNaN(category_id)) {
-        throw new AppError("InvalidCategoryId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid category id", HTTP_FAILED.BAD_REQUEST);
       }
 
       const updated = await prisma.categories.update({
-        data: {
-          name,
-          description,
-        },
+        data: reqBody,
         where: { id: category_id },
       });
 
       if (!updated) {
-        throw new AppError("CategoryNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("category not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const categories = useCache.get(key) ?? [];
@@ -107,15 +99,15 @@ export const CategoryService = {
       );
 
       return updated;
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2002: {
-          code: "CategoryAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "category name already exist",
         },
         P2025: {
-          code: "CategoryIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
+          message: "category id not found",
         },
       });
     }
@@ -124,17 +116,20 @@ export const CategoryService = {
   async destroy(id) {
     try {
       if (!id) {
-        throw new AppError("CategoryIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("category id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const category_id = Number(id);
 
       if (Number.isNaN(category_id)) {
-        throw new AppError("InvalidCategoryId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid category id", HTTP_FAILED.BAD_REQUEST);
       }
 
       if (category_id == 1) {
-        throw new AppError("CannotDeleteOnlyUpdate", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError(
+          "can't delete this category",
+          HTTP_FAILED.BAD_REQUEST,
+        );
       }
 
       const deleteRow = await prisma.categories.delete({
@@ -148,15 +143,15 @@ export const CategoryService = {
       );
 
       return deleteRow;
-    } catch (error) {
-      throw HandlePrismaError(error, {
+    } catch (e) {
+      throw HandlePrismaError(e, {
         P2025: {
-          code: "CategoryIdNotFound",
           status: HTTP_FAILED.NOT_FOUND,
+          message: "category id not found",
         },
         P2003: {
-          code: "CategoryInUse",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "category still use on other table",
         },
       });
     }

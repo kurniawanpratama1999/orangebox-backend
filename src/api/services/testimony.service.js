@@ -2,9 +2,22 @@ import { prisma } from "#orm/lib/prisma.js";
 import { useCache } from "#store/cache.js";
 import { AppError } from "#utils/AppError.js";
 import { HTTP_FAILED } from "#utils/Flash.js";
+import { HandleImage } from "#utils/HandleImage.js";
 import { HandlePrismaError } from "#utils/HandlePrismaError.js";
 
 const key = "testimony:all";
+
+const configHandleImage = {
+  folderName: "testimony",
+  prefixName: "testimonyImage",
+  qualityPercentage: 60,
+  sizePixel: {
+    width: 100,
+    height: 100,
+  },
+  targetKb: 100,
+};
+
 export const TestimonyService = {
   async index() {
     if (useCache.has(key)) {
@@ -12,7 +25,7 @@ export const TestimonyService = {
       return useCache.get(key);
     }
 
-    const testimonies = await prisma.facilities.findMany();
+    const testimonies = await prisma.testimonies.findMany();
     useCache.set(key, testimonies);
 
     return testimonies;
@@ -20,13 +33,13 @@ export const TestimonyService = {
 
   async show(id) {
     if (!id) {
-      throw new AppError("TestimonyIdNotFound", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("testimony id not found", HTTP_FAILED.BAD_REQUEST);
     }
 
     const testimony_id = Number(id);
 
     if (Number.isNaN(testimony_id)) {
-      throw new AppError("InvalidTestimonyId", HTTP_FAILED.BAD_REQUEST);
+      throw new AppError("invalid testimony id", HTTP_FAILED.BAD_REQUEST);
     }
 
     const testimonies = useCache.get(key) ?? [];
@@ -39,63 +52,92 @@ export const TestimonyService = {
       }
     }
 
-    const testimonyById = await prisma.facilities.findUnique({
+    const testimonyById = await prisma.testimonies.findUnique({
       where: { id: testimony_id },
     });
 
     if (!testimonyById) {
-      throw new AppError("TestimonyNotFound", HTTP_FAILED.NOT_FOUND);
+      throw new AppError("testimony not found", HTTP_FAILED.NOT_FOUND);
     }
 
     return testimonyById;
   },
 
-  async create({ name, photo, description }) {
+  async create(reqBody, reqFile) {
+    let created;
     try {
-      const newData = await prisma.facilities.create({
-        data: {
-          name,
-          photo,
-          description,
-        },
+      const handleImage = new HandleImage(configHandleImage);
+
+      await handleImage.convert(reqFile.buffer);
+
+      const data = { ...reqBody, photo: handleImage.fileName };
+
+      created = await prisma.testimonies.create({
+        data,
       });
 
+      await handleImage.save();
+
       const testimonies = useCache.get(key) ?? [];
-      useCache.set(key, [...testimonies, newData]);
-      return newData;
+      useCache.set(key, [...testimonies, created]);
+      return created;
     } catch (error) {
+      if (created?.id) {
+        await prisma.testimonies.delete({ where: { id: created.id } });
+      }
       throw HandlePrismaError(error, {
         P2002: {
-          code: "TestimonyAlreadyExist",
           status: HTTP_FAILED.BAD_REQUEST,
+          message: "testimony already exist",
         },
       });
     }
   },
 
-  async update(id, { name, photo, description }) {
+  async update(id, reqBody, reqFile) {
     try {
       if (!id) {
-        throw new AppError("TestimonyIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("testimony id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const testimony_id = Number(id);
 
       if (Number.isNaN(testimony_id)) {
-        throw new AppError("InvalidTestimonyId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid testimony id", HTTP_FAILED.BAD_REQUEST);
       }
 
-      const updated = await prisma.facilities.update({
-        data: {
-          name,
-          photo,
-          description,
-        },
-        where: { id: testimony_id },
+      let data = reqBody;
+
+      const handleImage = new HandleImage(configHandleImage);
+
+      if (reqFile) {
+        await handleImage.convert(reqFile.buffer);
+
+        data = { ...reqBody, photo: handleImage.fileName };
+      }
+
+      const result = await prisma.$transaction(async (trx) => {
+        const testimony = await trx.testimonies.findUnique({
+          where: { id: testimony_id },
+        });
+
+        if (!testimony) {
+          throw new AppError("testimony not found", HTTP_FAILED.NOT_FOUND);
+        }
+
+        const updated = await trx.testimonies.update({
+          where: { id: testimony_id },
+          data,
+        });
+
+        return { testimony, updated };
       });
 
-      if (!updated) {
-        throw new AppError("TestimonyNotFound", HTTP_FAILED.BAD_REQUEST);
+      if (reqFile) {
+        await handleImage.save();
+        if (result.testimony?.photo) {
+          await HandleImage.delete(result.testimony.photo);
+        }
       }
 
       const testimonies = useCache.get(key);
@@ -109,11 +151,11 @@ export const TestimonyService = {
     } catch (error) {
       throw HandlePrismaError(error, {
         P2002: {
-          code: "TestimonyAlreadyExist",
+          message: "testimony already exist",
           status: HTTP_FAILED.BAD_REQUEST,
         },
         P2025: {
-          code: "TestimonyIdNotFound",
+          message: "testimony id not found",
           status: HTTP_FAILED.NOT_FOUND,
         },
       });
@@ -123,18 +165,22 @@ export const TestimonyService = {
   async destroy(id) {
     try {
       if (!id) {
-        throw new AppError("TestimonyIdNotFound", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("testimony id not found", HTTP_FAILED.BAD_REQUEST);
       }
 
       const testimony_id = Number(id);
 
       if (Number.isNaN(testimony_id)) {
-        throw new AppError("InvalidTestimonyId", HTTP_FAILED.BAD_REQUEST);
+        throw new AppError("invalid testimony id", HTTP_FAILED.BAD_REQUEST);
       }
 
-      const deleted = await prisma.facilities.delete({
+      const deleted = await prisma.testimonies.delete({
         where: { id: testimony_id },
       });
+
+      if (deleted.photo) {
+        await HandleImage.delete(deleted.photo);
+      }
 
       const testimonies = useCache.get(key);
 
@@ -147,11 +193,11 @@ export const TestimonyService = {
     } catch (error) {
       throw HandlePrismaError(error, {
         P2025: {
-          code: "TestimonyIdNotFound",
+          message: "testimony id not found",
           status: HTTP_FAILED.NOT_FOUND,
         },
         P2003: {
-          code: "TestimonyInUse",
+          message: "testimony still use on other table",
           status: HTTP_FAILED.BAD_REQUEST,
         },
       });

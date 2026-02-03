@@ -1,5 +1,5 @@
 import { AuthController } from "#api/controllers/auth.controller.js";
-import { ZodMiddleware } from "#api/middlewares/ZodMiddleware.js";
+import { ReqBodyMiddleware } from "#api/middlewares/ReqBodyMiddleware.js";
 import { AuthValidation } from "#api/validations/auth.validation.js";
 import { Router } from "express";
 
@@ -11,7 +11,7 @@ AuthRoutes.get("/login", (req, res) => {
 
 AuthRoutes.post(
   "/login",
-  ZodMiddleware(AuthValidation.login),
+  ReqBodyMiddleware(AuthValidation.login),
   AuthController.login,
 );
 

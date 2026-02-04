@@ -2,21 +2,21 @@ import z from "zod";
 
 export const ProductValidation = {
   create: z.object({
-    category_id: z.number(),
+    category_id: z.coerce.number(),
     name: z.string(),
     description: z.string(),
-    price: z.number(),
-    is_favorite: z.boolean(),
-    is_new: z.boolean(),
+    price: z.coerce.number(),
+    is_favorite: z.coerce.boolean(),
+    is_new: z.coerce.boolean(),
   }),
 
   update: z.object({
-    category_id: z.number().nullable(),
+    category_id: z.coerce.number().nullable(),
     name: z.string().nullable(),
     description: z.string().nullable(),
-    price: z.number().nullable(),
-    is_favorite: z.boolean().nullable(),
-    is_new: z.boolean().nullable(),
+    price: z.coerce.number().nullable(),
+    is_favorite: z.coerce.boolean().nullable(),
+    is_new: z.coerce.boolean().nullable(),
   }),
 
   photo: z.object({

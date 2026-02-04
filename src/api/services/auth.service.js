@@ -165,7 +165,7 @@ export const AuthService = {
       const user_id = Number(sub);
       const user = await prisma.users.findUnique({
         where: { id: user_id },
-        select: { name: true, username: true },
+        omit: { password: true },
       });
 
       return user;

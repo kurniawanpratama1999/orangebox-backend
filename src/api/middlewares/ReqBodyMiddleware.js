@@ -1,4 +1,3 @@
-import { AppError } from "#utils/AppError.js";
 import { Flash, HTTP_FAILED } from "#utils/Flash.js";
 
 export const ReqBodyMiddleware = (ZodObject) => (req, res, next) => {

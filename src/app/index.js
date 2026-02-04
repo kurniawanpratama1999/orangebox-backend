@@ -55,7 +55,6 @@ appRoutes.post(
 );
 
 appRoutes.use((err, req, res, next) => {
-  console.log(err);
   const status = 500;
   const message = "internal server error";
 
@@ -63,6 +62,7 @@ appRoutes.use((err, req, res, next) => {
     return Flash.fail(res, { status: err.status, message: err.message });
   }
 
+  console.log(err);
   return Flash.fail(res, { status, message });
 });
 
